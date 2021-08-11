@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane fx:id="viewProjectPane" prefHeight="40.0" prefWidth="530.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <children>
+            <Label fx:id="projectLabel" layoutX="10.0" layoutY="11.0" nodeOrientation="RIGHT_TO_LEFT" prefWidth="300.0" text="Label" textAlignment="RIGHT" />
+            <Button fx:id="editProjectBtn" layoutX="400.0" layoutY="7.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="61.0" text="ویرایش" />
+            <Button fx:id="deleteProjectBtn" layoutX="465.0" layoutY="7.0" mnemonicParsing="false" prefWidth="61.0" text="حذف" />
+            <Button fx:id="exportBtn" layoutX="336.0" layoutY="7.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="61.0" text="خروجی" />
+         </children></Pane>
+      <Pane fx:id="editProjectPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="530.0" visible="false" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <children>
+            <TextField fx:id="projectNameField" layoutX="6.0" layoutY="7.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="350.0" />
+            <Button fx:id="saveProjectBtn" layoutX="378.0" layoutY="7.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="61.0" text="ثبت" />
+            <Button fx:id="cancelBtn" layoutX="445.0" layoutY="7.0" mnemonicParsing="false" prefWidth="61.0" text="انصراف" />
+         </children></Pane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane nodeOrientation="LEFT_TO_RIGHT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.salmanian.controllers.SelectParentController">
+   <children>
+      <TextField fx:id="searchField" alignment="CENTER" prefHeight="26.0" prefWidth="303.0" promptText="جستجوی نیازمندی" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="searchBtn" mnemonicParsing="false" onAction="#onSearchRequirementClick" text="جستجو" AnchorPane.rightAnchor="330.0" AnchorPane.topAnchor="20.0" />
+      <ListView fx:id="requirementListView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="259.0" prefWidth="572.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0" />
+      <HBox alignment="CENTER" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+         <children>
+            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="انصراف">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="addBtn" mnemonicParsing="false" onAction="#onAddParentsClick" text="افزودن">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

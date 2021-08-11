@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.salmanian.controllers.RequirementsController">
+   <children>
+      <Button fx:id="createRequirementBtn" alignment="CENTER" layoutX="403.0" layoutY="12.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#onNewRequirementClick" prefHeight="26.0" prefWidth="113.0" text="ایجاد نیازمندی" AnchorPane.leftAnchor="153.0" AnchorPane.topAnchor="20.0">
+         <HBox.margin>
+            <Insets left="160.0" />
+         </HBox.margin>
+      </Button>
+      <Button fx:id="searchBtn" alignment="CENTER" layoutX="186.0" layoutY="13.0" mnemonicParsing="false" onAction="#onSearchClick" text="جستجو" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="20.0">
+         <HBox.margin>
+            <Insets left="5.0" />
+         </HBox.margin>
+      </Button>
+      <TextField fx:id="searchRequirementField" layoutX="10.0" layoutY="13.0" nodeOrientation="RIGHT_TO_LEFT" promptText="جستجوی نیازمندی" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <HBox.margin>
+            <Insets left="10.0" />
+         </HBox.margin>
+      </TextField>
+      <Button fx:id="returnBtn" layoutX="526.0" layoutY="13.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onReturnClick" prefWidth="65.0" text="بازگشت" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <HBox.margin>
+            <Insets left="10.0" />
+         </HBox.margin>
+      </Button>
+      <TreeView fx:id="filterTreeView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </TreeView>
+      <Button fx:id="filterBtn" layoutX="78.0" layoutY="320.0" mnemonicParsing="false" onAction="#onFilterClick" text="فیلتر" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="125.0" />
+      <ListView fx:id="requirementListView" layoutX="200.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="350.0" prefWidth="400.0" visible="false" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <TreeView fx:id="requirementTreeView" layoutX="200.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="350.0" prefWidth="400.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane nodeOrientation="LEFT_TO_RIGHT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.salmanian.controllers.RequirementFormController">
+   <children>
+      <VBox alignment="CENTER" layoutX="355.0" layoutY="14.0" prefHeight="285.0" prefWidth="650.0" AnchorPane.leftAnchor="355.0" AnchorPane.rightAnchor="355.0" AnchorPane.topAnchor="14.0">
+         <children>
+            <AnchorPane>
+               <children>
+                  <Label layoutX="632.0" layoutY="23.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="16.0" prefWidth="90.0" text="پیشوند شمارش" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="23.0" />
+                  <TextField fx:id="prefixField" layoutX="537.0" layoutY="20.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="20.0" />
+                  <Label layoutX="412.0" layoutY="23.0" nodeOrientation="RIGHT_TO_LEFT" text="عنوان نیازمندی" AnchorPane.rightAnchor="240.0" AnchorPane.topAnchor="23.0" />
+                  <TextField fx:id="titleField" layoutX="326.0" layoutY="20.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="305.0" AnchorPane.rightAnchor="326.0" AnchorPane.topAnchor="20.0" />
+                  <Label layoutX="632.0" layoutY="55.0" nodeOrientation="RIGHT_TO_LEFT" text="اولویت" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="55.0" />
+                  <ComboBox fx:id="priorityCombo" layoutX="537.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefWidth="100.0" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="55.0" />
+                  <Label layoutX="412.0" layoutY="55.0" nodeOrientation="RIGHT_TO_LEFT" text="نوع نیازمندی" AnchorPane.rightAnchor="240.0" AnchorPane.topAnchor="55.0" />
+                  <ComboBox fx:id="requirementTypeCombo" layoutX="322.0" layoutY="54.0" nodeOrientation="RIGHT_TO_LEFT" prefWidth="100.0" AnchorPane.rightAnchor="330.0" AnchorPane.topAnchor="54.0" />
+                  <Label layoutX="202.0" layoutY="59.0" nodeOrientation="RIGHT_TO_LEFT" text="تغییرات" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="59.0" />
+                  <ComboBox fx:id="changesCombo" layoutX="122.0" layoutY="55.0" nodeOrientation="RIGHT_TO_LEFT" prefWidth="100.0" AnchorPane.rightAnchor="530.0" AnchorPane.topAnchor="55.0" />
+                  <Label layoutX="632.0" layoutY="90.0" nodeOrientation="RIGHT_TO_LEFT" text="وضعیت بازبینی" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0" />
+                  <ComboBox fx:id="reviewStatusCombo" layoutX="537.0" layoutY="90.0" nodeOrientation="RIGHT_TO_LEFT" prefWidth="100.0" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="90.0" />
+                  <Label layoutX="412.0" layoutY="90.0" nodeOrientation="RIGHT_TO_LEFT" text="وضعیت ارزیابی" AnchorPane.rightAnchor="240.0" AnchorPane.topAnchor="90.0" />
+                  <ComboBox fx:id="evaluationStatusCombo" layoutX="322.0" layoutY="90.0" nodeOrientation="RIGHT_TO_LEFT" prefWidth="100.0" AnchorPane.rightAnchor="330.0" AnchorPane.topAnchor="90.0" />
+                  <Label layoutX="202.0" layoutY="90.0" nodeOrientation="RIGHT_TO_LEFT" text="روش ارزیابی" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="90.0" />
+                  <ComboBox fx:id="evaluationMethodCombo" layoutX="122.0" layoutY="90.0" nodeOrientation="RIGHT_TO_LEFT" prefWidth="100.0" AnchorPane.rightAnchor="530.0" AnchorPane.topAnchor="90.0" />
+                  <Label layoutX="567.0" layoutY="125.0" prefHeight="26.0" prefWidth="65.0" text="فاکتور کیفی" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="125.0" />
+                  <ComboBox fx:id="qualityFactorCombo" layoutX="537.0" layoutY="125.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="125.0" />
+                  <Label layoutX="632.0" layoutY="160.0" nodeOrientation="RIGHT_TO_LEFT" text="پیوست" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="160.0" />
+                  <TextArea fx:id="attachmentsArea" layoutX="537.0" layoutY="160.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="75.0" prefWidth="517.0" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="160.0" />
+                  <Button fx:id="selectParentBtn" layoutX="476.0" layoutY="255.0" mnemonicParsing="false" onAction="#onSelectParentClick" text="انتخاب نیازمندی های والد" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="255.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" layoutY="300.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="300.0">
+         <children>
+            <VBox alignment="TOP_RIGHT">
+               <children>
+                  <Label text="نیازمندی های فرزند">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ListView fx:id="childrenRequirementListView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="650.0">
+                     <HBox.margin>
+                        <Insets top="20.0" />
+                     </HBox.margin>
+                  </ListView>
+               </children>
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox alignment="TOP_RIGHT">
+               <children>
+                  <Label nodeOrientation="RIGHT_TO_LEFT" text="نیازمندی های والد">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin></Label>
+                  <ListView fx:id="parentRequirementListView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="650.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ListView>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="615.0" layoutY="736.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+         <children>
+            <Pane prefHeight="25.0" prefWidth="65.0">
+               <children>
+                  <Button fx:id="deleteBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onDeleteClick" prefWidth="65.0" text="حذف" visible="false" />
+                  <Button fx:id="cancelBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onCancelClick" prefWidth="65.0" text="انصراف" />
+               </children>
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </Pane>
+            <Button fx:id="saveBtn" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onSaveRequirementClick" prefWidth="65.0" text="ذخیره" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
