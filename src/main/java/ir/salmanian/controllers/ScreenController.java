@@ -1,18 +1,22 @@
 package ir.salmanian.controllers;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ScreenController {
-    private Map<String, Pane> screenMap = new HashMap<>();
     private Map<String, Stage> stageMap = new HashMap<>();
-    private Scene main;
+    private Map<String, Scene> sceneMap = new HashMap<>();
+    private Stage mainStage;
     private static ScreenController instance;
 
     private ScreenController() {
@@ -24,39 +28,54 @@ public class ScreenController {
         return instance;
     }
 
-    public ScreenController(Scene main) {
-        this.main = main;
+    public void setMainStage(Stage mainStage) {
+        this.mainStage = mainStage;
     }
 
-    public void setMainScene(Scene scene) {
-        main = scene;
+    public Stage getMainStage() {
+        return mainStage;
     }
 
-    public void addScreen(String name, String fxmlFile) throws IOException {
-        Pane pane = FXMLLoader.load(getClass().getResource(fxmlFile));
-        screenMap.put(name, pane);
+    public void addScene(String sceneKey, String fxmlFile) throws IOException {
+        Pane pane = FXMLLoader.load(getClass().getResource(String.format("/ui/%s", fxmlFile)));
+        sceneMap.put(sceneKey, new Scene(pane));
+        System.out.println("SceneMap " + sceneMap);
     }
 
-    public void removeScreen(String name) {
-        screenMap.remove(name);
+    public void activateScene(String sceneKey, Stage stage) {
+        stage.setScene(sceneMap.get(sceneKey));
+        stage.setWidth(this.mainStage.getMinWidth());
+        stage.setHeight(this.mainStage.getMinHeight());
     }
 
-    public void activate(String name) {
-        main.setRoot(screenMap.get(name));
-
+    public Stage openNewStage(String stageKey) {
+        if (stageMap.get(stageKey) != null) {
+            stageMap.get(stageKey).requestFocus();
+            return stageMap.get(stageKey);
+        }
+        Stage stage = new Stage();
+        stage.setTitle("مدیریت نیازمندی‌‌ ها");
+        stage.setMinWidth(800);
+        stage.setMinHeight(600);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                stage.close();
+                stageMap.remove(stageKey);
+            }
+        });
+        stageMap.put(stageKey, stage);
+        System.out.println("StageMap " + stageMap);
+        stage.show();
+        return stage;
     }
 
-    public void openNewWindow(String name) {
-        Scene newScene = new Scene(screenMap.get(name));
-        Stage newStage = new Stage();
-        newStage.setTitle("New Stage");
-        newStage.setScene(newScene);
-        stageMap.put(name, newStage);
-        newStage.show();
+    public Stage getStage(String stageKey) {
+        return stageMap.get(stageKey);
     }
 
-    public void closeNewWindow(String name) {
-        stageMap.get(name).hide();
-        stageMap.remove(name);
+    public void closeStage(String stageKey) {
+        stageMap.get(stageKey).close();
+        stageMap.remove(stageKey);
     }
 }

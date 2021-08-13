@@ -9,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.io.Serializable;
 import java.util.List;
 
 public class DatabaseManagement {
@@ -111,7 +112,7 @@ public class DatabaseManagement {
 
     public List<Requirement> getProjectRequirements(Project project) {
         Session session = getSession();
-        String hql = "FROM Requirement r WHERE r.project =:project ORDER BY r.prefix,r.id ASC";
+        String hql = "FROM Requirement r WHERE r.project =:project ORDER BY r.level,r.id ASC";
         Query query = session.createQuery(hql);
         query.setParameter("project", project);
         List<Requirement> requirements = query.getResultList();
@@ -129,7 +130,7 @@ public class DatabaseManagement {
 
     public List<Requirement> searchRequirements(String text, Project project) {
         Session session = getSession();
-        String hql = "FROM Requirement r WHERE r.project =:project AND (r.title LIKE :text OR CONCAT(r.prefix,'-',r.id) LIKE :text)";
+        String hql = "FROM Requirement r WHERE r.project =:project AND (r.title LIKE :text OR CONCAT(r.prefix,'-',r.id) LIKE :text) ORDER BY r.level, r.id ASC";
         Query query = session.createQuery(hql);
         query.setParameter("text", "%" + text + "%");
         query.setParameter("project", project);
@@ -161,4 +162,13 @@ public class DatabaseManagement {
         return requirements;
     }
 
+    public Integer getMaxLevel(Project project) {
+        Session session = getSession();
+        String hql = "SELECT MAX(r.level) FROM Requirement r WHERE r.project =:project";
+        Query query = session.createQuery(hql);
+        query.setParameter("project", project);
+        Integer maxLevel = (Integer) query.getSingleResult();
+        session.close();
+        return maxLevel;
+    }
 }

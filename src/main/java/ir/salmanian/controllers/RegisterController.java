@@ -2,9 +2,7 @@ package ir.salmanian.controllers;
 
 import ir.salmanian.models.User;
 import ir.salmanian.services.UserService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -26,18 +24,16 @@ public class RegisterController {
     @FXML
     private Label errorLabel;
 
-
+    @FXML
     public void onRegisterClick() {
-        errorLabel.setText("");
         if (!checkEmptyFields() && checkRepeatPassword() && !usernameExists() && !emailExists()) {
             User user = new User();
             user.setUsername(usernameField.getText());
             user.setPassword(passwordField.getText());
             user.setEmail(emailField.getText());
             UserService.getInstance().registerUser(user);
-            ScreenController.getInstance().activate("login");
+            ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
         }
-
     }
 
     private boolean checkRepeatPassword() {
@@ -88,9 +84,10 @@ public class RegisterController {
         }
         return false;
     }
+
     @FXML
     public void onBackClick() throws IOException {
-        ScreenController.getInstance().addScreen("login", "../ui/Login.fxml");
-        ScreenController.getInstance().activate("login");
+        ScreenController.getInstance().addScene("loginScene", "Login.fxml");
+        ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
     }
 }

@@ -37,14 +37,19 @@ public class SelectParentController implements Initializable {
     private Button cancelBtn;
 
     private Set<Requirement> selectedRequirements = new HashSet<>();
-
     private ObservableList<Requirement> requirementObservableList;
+    private Requirement requirementHolder;
 
     public SelectParentController() {
+        requirementHolder = RequirementHolder.getInstance().getRequirement();
         requirementObservableList = FXCollections.observableArrayList();
         List<Requirement> requirements = RequirementService.getInstance().getRequirements(ProjectHolder.getInstance().getProject());
-        requirements.remove(RequirementHolder.getInstance().getRequirement());
-        requirementObservableList.addAll(requirements);
+        requirements.remove(requirementHolder);
+        for (Requirement req : requirements) {
+            if (req.getLevel() == requirementHolder.getLevel() - 1) {
+                requirementObservableList.add(req);
+            }
+        }
     }
 
     @Override
@@ -56,7 +61,7 @@ public class SelectParentController implements Initializable {
                     public ObservableValue<Boolean> call(Requirement param) {
                         BooleanProperty observable = new SimpleBooleanProperty();
 
-                        if (RequirementHolder.getInstance().getRequirement().getParents().contains(param)) {
+                        if (requirementHolder.getParents().contains(param)) {
                             observable.setValue(true);
                             selectedRequirements.add(param);
                         }
@@ -91,28 +96,38 @@ public class SelectParentController implements Initializable {
 
     @FXML
     public void onCancelClick(ActionEvent event) throws IOException {
-        ScreenController.getInstance().addScreen("requirementForm", "../ui/RequirementForm.fxml");
-        ScreenController.getInstance().activate("requirementForm");
+        if (requirementHolder.getId() == null)
+            ScreenController.getInstance().closeStage("newSelectParentStage");
+        else
+            ScreenController.getInstance().closeStage(String.format("selectParentStage-%d", requirementHolder.getId()));
     }
 
     @FXML
     public void onAddParentsClick(ActionEvent event) throws IOException {
-        Requirement[]a = selectedRequirements.toArray(new Requirement[]{});
-        for (int i = 0; i < a.length; i++) {
-            System.out.println(a[i] + " " +  a[0].equals(a[i]));
+        Requirement[] a = selectedRequirements.toArray(new Requirement[]{});
+        requirementHolder.setParents(new ArrayList<>(selectedRequirements));
+        if (requirementHolder.getId() == null) {
+            ScreenController.getInstance().addScene("newRequirementFormScene", "RequirementForm.fxml");
+            ScreenController.getInstance().activateScene("newRequirementFormScene", ScreenController.getInstance().getStage("newRequirementFormStage"));
+            ScreenController.getInstance().closeStage("newSelectParentStage");
+        } else {
+            ScreenController.getInstance().addScene(String.format("requirementFormScene-%d", requirementHolder.getId()), "RequirementForm.fxml");
+            ScreenController.getInstance().activateScene(String.format("requirementFormScene-%d", requirementHolder.getId()), ScreenController.getInstance().getStage(String.format("requirementFormStage-%d", requirementHolder.getId())));
+            ScreenController.getInstance().closeStage(String.format("selectParentStage-%d", requirementHolder.getId()));
         }
-        RequirementHolder.getInstance().getRequirement().setParents(new ArrayList<>(selectedRequirements));
-        ScreenController.getInstance().addScreen("requirementForm", "../ui/RequirementForm.fxml");
-        ScreenController.getInstance().activate("requirementForm");
     }
 
     @FXML
     public void onSearchRequirementClick(ActionEvent event) {
         List<Requirement> requirements = RequirementService.getInstance()
                 .searchRequirement(searchField.getText().trim(), ProjectHolder.getInstance().getProject());
-        requirements.remove(RequirementHolder.getInstance().getRequirement());
+        requirements.remove(requirementHolder);
         requirementObservableList.clear();
-        requirementObservableList.addAll(requirements);
+        for (Requirement req : requirements) {
+            if (req.getLevel() == requirementHolder.getLevel() - 1) {
+                requirementObservableList.add(req);
+            }
+        }
         requirementListView.setItems(requirementObservableList);
     }
 }

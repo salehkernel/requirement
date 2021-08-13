@@ -4,6 +4,7 @@ import ir.salmanian.db.DatabaseManagement;
 import ir.salmanian.models.Project;
 import ir.salmanian.models.Requirement;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class RequirementService {
         DatabaseManagement.getInstance().saveRequirement(requirement);
     }
 
-    public List<Requirement> searchRequirement(String text,Project project) {
-        return DatabaseManagement.getInstance().searchRequirements(text,project);
+    public List<Requirement> searchRequirement(String text, Project project) {
+        return DatabaseManagement.getInstance().searchRequirements(text, project);
     }
 
     public void deleteRequirement(Requirement requirement) {
@@ -37,8 +38,12 @@ public class RequirementService {
     }
 
     public List<Requirement> getChildrenRequirements(Requirement requirement) {
-        if(requirement.getId() == null)
+        if (requirement.getId() == null)
             return new ArrayList<>();
         return DatabaseManagement.getInstance().getChildrenRequirements(requirement);
+    }
+
+    public Integer getMaxLevel(Project project) {
+        return DatabaseManagement.getInstance().getMaxLevel(project);
     }
 }

@@ -4,14 +4,14 @@ import ir.salmanian.models.User;
 
 public class UserHolder {
     private User user;
-    private  static UserHolder instance;
+    private static UserHolder instance;
 
-    private UserHolder(){
+    private UserHolder() {
 
     }
 
-    public static UserHolder getInstance(){
-        if(instance == null)
+    public static UserHolder getInstance() {
+        if (instance == null)
             instance = new UserHolder();
         return instance;
     }

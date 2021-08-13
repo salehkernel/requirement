@@ -7,7 +7,7 @@ public enum EvaluationMethod {
     SYSTEM_TEST("تست سیستم"),
     COMPONENT_TEST("تست کامپوننت");
 
-    private EvaluationMethod(String label){
+    private EvaluationMethod(String label) {
         this.label = label;
     }
 

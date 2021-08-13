@@ -44,13 +44,12 @@ public class ProjectsController implements Initializable {
 
     @FXML
     public void newProjectClick(ActionEvent event) {
-
         projectsListView.setEditable(true);
         projectObservableList.add(0, new Project().setEditable(true));
     }
 
     @FXML
-    public void searchProjectClick(ActionEvent event) {
+    public void onSearchProjectClick(ActionEvent event) {
         List<Project> projects = ProjectService.getInstance().searchProjects(searchField.getText().trim());
         projectObservableList.clear();
         projectObservableList.addAll(projects);
@@ -58,9 +57,9 @@ public class ProjectsController implements Initializable {
     }
 
     @FXML
-    public void logoutClick(ActionEvent event) throws IOException {
-        ScreenController.getInstance().addScreen("login", "../ui/Login.fxml");
-        ScreenController.getInstance().activate("login");
+    public void onLogoutClick(ActionEvent event) throws IOException {
+        ScreenController.getInstance().addScene("loginScene", "Login.fxml");
+        ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
         UserHolder.getInstance().setUser(null);
     }
 

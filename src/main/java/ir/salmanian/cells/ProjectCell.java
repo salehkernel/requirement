@@ -1,6 +1,5 @@
 package ir.salmanian.cells;
 
-import ir.salmanian.RequirementManagementApplication;
 import ir.salmanian.controllers.ScreenController;
 import ir.salmanian.models.Project;
 import ir.salmanian.models.Requirement;
@@ -23,6 +22,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.poi.xwpf.usermodel.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,7 +60,7 @@ public class ProjectCell extends ListCell<Project> {
             setGraphic(null);
         } else {
             if (fxmlLoader == null) {
-                fxmlLoader = new FXMLLoader(getClass().getResource("../ui/ProjectCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource("/ui/ProjectCell.fxml"));
                 fxmlLoader.setController(this);
 
                 try {
@@ -108,8 +108,8 @@ public class ProjectCell extends ListCell<Project> {
                         if (event.getClickCount() == 2) {
                             try {
                                 ProjectHolder.getInstance().setProject(project);
-                                ScreenController.getInstance().addScreen("requirements", "../ui/Requirements.fxml");
-                                ScreenController.getInstance().activate("requirements");
+                                ScreenController.getInstance().addScene("requirementsScene", "Requirements.fxml");
+                                ScreenController.getInstance().activateScene("requirementsScene", ScreenController.getInstance().getMainStage());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -147,18 +147,18 @@ public class ProjectCell extends ListCell<Project> {
                                 DocumentUtils.setParagraphRTL(paragraph);
                                 run.addBreak();
                                 Iterator<Requirement> requirementIterator = requirementList.iterator();
-                                while (requirementIterator.hasNext()){
+                                while (requirementIterator.hasNext()) {
                                     Requirement req = requirementIterator.next();
-                                    if (req.getParents().isEmpty()){
+                                    if (req.getParents().isEmpty()) {
                                         requirementParentSet.add(req);
                                     }
                                     requirementIterator.remove();
                                 }
-                                writeToDoc(document, requirementParentSet,1);
+                                writeToDoc(document, requirementParentSet, 1);
                                 int level = 2;
                                 while (!requirementParentSet.isEmpty()) {
                                     Iterator<Requirement> it = requirementParentSet.iterator();
-                                    while (it.hasNext()){
+                                    while (it.hasNext()) {
                                         Requirement parent = it.next();
                                         List<Requirement> requirementList1 = RequirementService.getInstance().getChildrenRequirements(parent);
                                         if (!requirementList1.isEmpty())
@@ -166,11 +166,11 @@ public class ProjectCell extends ListCell<Project> {
                                         it.remove();
                                     }
 
-                                    writeToDoc(document, requirementChildrenSet,level++);
+                                    writeToDoc(document, requirementChildrenSet, level++);
                                     requirementParentSet = requirementChildrenSet;
                                     requirementChildrenSet = new HashSet<>();
                                 }
-                                DocumentUtils.setDocumentFont(document,"Lateef");
+                                DocumentUtils.setDocumentFont(document, "Lateef");
                                 document.write(outputStream);
                                 outputStream.close();
                                 System.out.println("done");
@@ -202,7 +202,7 @@ public class ProjectCell extends ListCell<Project> {
     }
 
     private void writeToDoc(XWPFDocument document, Set<Requirement> requirements, int level) {
-        if (requirements.size() != 0){
+        if (requirements.size() != 0) {
             XWPFParagraph paragraph = document.createParagraph();
             XWPFRun run = paragraph.createRun();
             paragraph.setAlignment(ParagraphAlignment.START);
@@ -211,7 +211,7 @@ public class ProjectCell extends ListCell<Project> {
             run.addBreak();
             for (Requirement requirement : requirements) {
                 DocumentUtils.setParagraphNotSplit(paragraph);
-                XWPFTable table = document.createTable(5,4);
+                XWPFTable table = document.createTable(5, 4);
                 table.setTableAlignment(TableRowAlign.RIGHT);
                 XWPFTableRow row1 = table.getRow(0);
                 row1.getCell(0).setText(String.format("شماره: %s-%s", requirement.getPrefix(), requirement.getId()));
@@ -260,6 +260,5 @@ public class ProjectCell extends ListCell<Project> {
             run.addBreak();
 
         }
-
     }
 }

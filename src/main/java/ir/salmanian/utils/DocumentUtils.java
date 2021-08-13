@@ -35,7 +35,6 @@ public class DocumentUtils {
                     if (ctppr == null) ctppr = ctp.addNewPPr();
                     ctppr.addNewBidi().setVal(STOnOff1.ON);
                 }
-
             }
         }
     }
@@ -47,16 +46,13 @@ public class DocumentUtils {
         ctppr.addNewBidi().setVal(STOnOff1.ON);
     }
 
-    public static void setParagraphNotSplit(XWPFParagraph paragraph){
-        //don't split the paragraph itself
+    public static void setParagraphNotSplit(XWPFParagraph paragraph) {
         paragraph.getCTP().addNewPPr().addNewKeepLines().setVal(STOnOff1.ON);
-        //keep this paragraph together with the next paragraph
         paragraph.getCTP().getPPr().addNewKeepNext().setVal(STOnOff1.ON);
     }
 
     public static void setDocumentFont(XWPFDocument document, String fontName) throws IOException, XmlException {
         XWPFStyles styles = document.createStyles();
-
         CTFonts fonts = CTFonts.Factory.newInstance();
         fonts.setEastAsia(fontName);
         fonts.setHAnsi(fontName);

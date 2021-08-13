@@ -6,7 +6,7 @@ public class RequirementHolder {
     private Requirement requirement;
     private static RequirementHolder instance;
 
-    private RequirementHolder(){
+    private RequirementHolder() {
 
     }
 

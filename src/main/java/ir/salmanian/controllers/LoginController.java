@@ -2,14 +2,12 @@ package ir.salmanian.controllers;
 
 import ir.salmanian.services.UserService;
 import ir.salmanian.utils.UserHolder;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 
@@ -26,15 +24,15 @@ public class LoginController {
     private Label errorLabel;
 
     public void onRegisterPageClick() throws IOException {
-        ScreenController.getInstance().addScreen("register", "../ui/Register.fxml");
-        ScreenController.getInstance().activate("register");
+        ScreenController.getInstance().addScene("registerScene", "Register.fxml");
+        ScreenController.getInstance().activateScene("registerScene", ScreenController.getInstance().getMainStage());
     }
 
     public void onLoginClick() throws IOException {
         if (!checkEmptyFields() && login()) {
             UserHolder.getInstance().setUser(UserService.getInstance().getUserByUsername(usernameField.getText()));
-            ScreenController.getInstance().addScreen("projects", "../ui/Projects.fxml");
-            ScreenController.getInstance().activate("projects");
+            ScreenController.getInstance().addScene("projectsScene", "Projects.fxml");
+            ScreenController.getInstance().activateScene("projectsScene", ScreenController.getInstance().getMainStage());
         }
     }
 

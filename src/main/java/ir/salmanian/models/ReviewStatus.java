@@ -5,7 +5,7 @@ public enum ReviewStatus {
     ACCEPT("قبول"),
     WAITING("انتظار");
 
-    private ReviewStatus(String label){
+    private ReviewStatus(String label) {
         this.label = label;
     }
 

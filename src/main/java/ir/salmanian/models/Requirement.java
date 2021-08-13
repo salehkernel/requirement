@@ -1,5 +1,6 @@
 package ir.salmanian.models;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,11 +13,11 @@ import java.util.Objects;
 public class Requirement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "sequence-generator" )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence-generator")
     @GenericGenerator(name = "sequence-generator", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name",value = "requirement_value"),
-                    @org.hibernate.annotations.Parameter(name = "initial_value",value = "1"),
-                    @org.hibernate.annotations.Parameter(name = "increment_size",value = "1")})
+            parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name", value = "requirement_value"),
+                    @org.hibernate.annotations.Parameter(name = "initial_value", value = "1"),
+                    @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")})
     private Long id;
     @Column(name = "prefix")
     private String prefix;
@@ -25,7 +26,7 @@ public class Requirement {
     @Column(name = "changes")
     private Change changes;
     @Column(name = "priority")
-    private Priority priority ;
+    private Priority priority;
     @Column(name = "evaluation_method")
     private EvaluationMethod evaluationMethod;
     @Column(name = "evaluation_status")
@@ -41,6 +42,9 @@ public class Requirement {
     @Column(name = "attachment")
     @Lob
     private String attachment;
+    @Column(name = "level")
+    @ColumnDefault(value = "1")
+    private Integer level;
 
     @ManyToMany(fetch = FetchType.EAGER)
     List<Requirement> parents = new ArrayList<>();
@@ -162,9 +166,23 @@ public class Requirement {
         return this;
     }
 
+    public Integer getLevel() {
+        return level;
+    }
+
+    public Requirement setLevel(Integer level) {
+        this.level = level;
+        return this;
+    }
+
     @Override
     public String toString() {
-        return  prefix + "-" + id + " " + title;
+        String prefix = "";
+        for (int i = 0; i < level - 1; i++) {
+            prefix = prefix + "S";
+        }
+        prefix = prefix + "R";
+        return prefix + "-" + id + " " + title;
     }
 
     @Override
