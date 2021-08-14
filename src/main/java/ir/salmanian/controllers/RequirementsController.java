@@ -5,7 +5,7 @@ import ir.salmanian.models.Requirement;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.ProjectHolder;
 import ir.salmanian.utils.RequirementHolder;
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.apache.commons.lang.WordUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -66,7 +67,7 @@ public class RequirementsController implements Initializable {
                     parentItem.getChildren().clear();
                     List<Requirement> childrenRequirements = RequirementService.getInstance().getChildrenRequirements(parentItem.getValue());
                     for (Requirement child : childrenRequirements) {
-                        TreeItem<Requirement> childItem = new CheckBoxTreeItem<>(child);
+                        TreeItem<Requirement> childItem = new TreeItem<>(child);
                         childItem.expandedProperty().addListener(this::changed);
                         childItem.getChildren().add(new CheckBoxTreeItem<>());
                         parentItem.getChildren().add(childItem);
@@ -102,6 +103,28 @@ public class RequirementsController implements Initializable {
         filterTreeView.setRoot(r);
         filterTreeView.setShowRoot(false);
         filterTreeView.setCellFactory(param -> new CheckBoxTreeCell<>());
+        requirementTreeView.setCellFactory(param -> {
+            TreeCell<Requirement> treeCell = new TreeCell<Requirement>() {
+                @Override
+                public void updateItem(Requirement item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null && !empty) {
+                        setText(item.toString());
+                    } else
+                        setText("");
+                }
+
+            };
+            treeCell.widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    String text = treeCell.getText();
+                    text = text.replace("\n", " ");
+                    treeCell.setText(WordUtils.wrap(text, (int) (70 * (treeCell.getWidth() / 478)), "\n", false));
+                }
+            });
+            return treeCell;
+        });
     }
 
     private void prepareTreeView() {

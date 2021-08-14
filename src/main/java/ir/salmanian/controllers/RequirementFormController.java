@@ -4,6 +4,8 @@ import ir.salmanian.models.*;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.ProjectHolder;
 import ir.salmanian.utils.RequirementHolder;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.apache.commons.lang.WordUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -116,12 +119,52 @@ public class RequirementFormController implements Initializable {
         parentRequirementObservableList = FXCollections.observableArrayList();
         parentRequirementObservableList.addAll(requirementHolder.getParents());
         parentRequirementListView.setItems(parentRequirementObservableList);
-
+        parentRequirementListView.setCellFactory(param -> {
+            ListCell<Requirement> listCell = new ListCell<Requirement>() {
+                @Override
+                protected void updateItem(Requirement item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null && !empty) {
+                        setText(item.toString());
+                    } else
+                        setText("");
+                }
+            };
+            listCell.widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    String text = listCell.getText();
+                    text = text.replace("\n", " ");
+                    listCell.setText(WordUtils.wrap(text, (int) (70 * (listCell.getWidth() / 478)), "\n", false));
+                }
+            });
+            return listCell;
+        });
         childrenRequirementObservableList = FXCollections.observableArrayList();
         List<Requirement> requirementList = RequirementService.getInstance().getChildrenRequirements(requirementHolder);
         childrenRequirementObservableList.addAll(requirementList);
         childrenRequirementListView.setItems(childrenRequirementObservableList);
-
+        childrenRequirementListView.setCellFactory(param -> {
+            ListCell<Requirement> listCell = new ListCell<Requirement>() {
+                @Override
+                protected void updateItem(Requirement item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null && !empty) {
+                        setText(item.toString());
+                    } else
+                        setText("");
+                }
+            };
+            listCell.widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    String text = listCell.getText();
+                    text = text.replace("\n", " ");
+                    listCell.setText(WordUtils.wrap(text, (int) (70 * (listCell.getWidth() / 478)), "\n", false));
+                }
+            });
+            return listCell;
+        });
         if (requirementHolder.getId() == null) {
             cancelBtn.setVisible(true);
             deleteBtn.setVisible(false);

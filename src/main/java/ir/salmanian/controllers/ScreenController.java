@@ -38,14 +38,14 @@ public class ScreenController {
 
     public void addScene(String sceneKey, String fxmlFile) throws IOException {
         Pane pane = FXMLLoader.load(getClass().getResource(String.format("/ui/%s", fxmlFile)));
-        sceneMap.put(sceneKey, new Scene(pane));
-        System.out.println("SceneMap " + sceneMap);
+        Scene scene = new Scene(pane);
+        sceneMap.put(sceneKey, scene);
     }
 
     public void activateScene(String sceneKey, Stage stage) {
         stage.setScene(sceneMap.get(sceneKey));
-        stage.setWidth(this.mainStage.getMinWidth());
-        stage.setHeight(this.mainStage.getMinHeight());
+        stage.setWidth(this.mainStage.getWidth());
+        stage.setHeight(this.mainStage.getHeight());
     }
 
     public Stage openNewStage(String stageKey) {
@@ -65,7 +65,6 @@ public class ScreenController {
             }
         });
         stageMap.put(stageKey, stage);
-        System.out.println("StageMap " + stageMap);
         stage.show();
         return stage;
     }
