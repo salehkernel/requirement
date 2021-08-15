@@ -88,29 +88,30 @@ public class RequirementFormController implements Initializable {
 
         levelComboBox.setItems(levelObservableList);
         levelComboBox.getSelectionModel().select(0);
+
         changesObservableList = FXCollections.observableArrayList(Change.values());
-        changesObservableList.add(0, null);
         changesCombo.setItems(changesObservableList);
+        changesCombo.getSelectionModel().select(0);
 
         priorityObservableList = FXCollections.observableArrayList(Priority.values());
-        priorityObservableList.add(0, null);
         priorityCombo.setItems(priorityObservableList);
+        priorityCombo.getSelectionModel().select(1);
 
         requirementTypeObservableList = FXCollections.observableArrayList(RequirementType.values());
-        requirementTypeObservableList.add(0, null);
         requirementTypeCombo.setItems(requirementTypeObservableList);
+        requirementTypeCombo.getSelectionModel().select(0);
 
         reviewStatusObservableList = FXCollections.observableArrayList(ReviewStatus.values());
-        reviewStatusObservableList.add(0, null);
         reviewStatusCombo.setItems(reviewStatusObservableList);
+        reviewStatusCombo.getSelectionModel().select(2);
 
         evaluationStatusObservableList = FXCollections.observableArrayList(EvaluationStatus.values());
-        evaluationStatusObservableList.add(0, null);
         evaluationStatusCombo.setItems(evaluationStatusObservableList);
+        evaluationStatusCombo.getSelectionModel().select(2);
 
         evaluationMethodObservableList = FXCollections.observableArrayList(EvaluationMethod.values());
-        evaluationMethodObservableList.add(0, null);
         evaluationMethodCombo.setItems(evaluationMethodObservableList);
+        evaluationMethodCombo.getSelectionModel().select(3);
 
         qualityFactorObservableList = FXCollections.observableArrayList(QualityFactor.values());
         qualityFactorObservableList.add(0, null);
@@ -119,6 +120,7 @@ public class RequirementFormController implements Initializable {
         parentRequirementObservableList = FXCollections.observableArrayList();
         parentRequirementObservableList.addAll(requirementHolder.getParents());
         parentRequirementListView.setItems(parentRequirementObservableList);
+
         parentRequirementListView.setCellFactory(param -> {
             ListCell<Requirement> listCell = new ListCell<Requirement>() {
                 @Override
@@ -176,12 +178,13 @@ public class RequirementFormController implements Initializable {
         }
         levelComboBox.setValue(requirementHolder.getPrefix() == null ? levelComboBox.getItems().get(0) : requirementHolder.getPrefix());
         titleField.setText(requirementHolder.getTitle());
-        priorityCombo.setValue(requirementHolder.getPriority());
-        requirementTypeCombo.setValue(requirementHolder.getRequirementType());
-        changesCombo.setValue(requirementHolder.getChanges());
-        reviewStatusCombo.setValue(requirementHolder.getReviewStatus());
-        evaluationStatusCombo.setValue(requirementHolder.getEvaluationStatus());
-        evaluationMethodCombo.setValue(requirementHolder.getEvaluationMethod());
+        priorityCombo.setValue(requirementHolder.getPriority() == null ?  priorityCombo.getSelectionModel().getSelectedItem():requirementHolder.getPriority());
+        requirementTypeCombo.setValue(requirementHolder.getRequirementType() == null ? requirementTypeCombo.getSelectionModel().getSelectedItem(): requirementHolder.getRequirementType());
+        changesCombo.setValue(requirementHolder.getChanges() == null ? changesCombo.getSelectionModel().getSelectedItem(): requirementHolder.getChanges());
+        reviewStatusCombo.setValue(requirementHolder.getReviewStatus() == null ? reviewStatusCombo.getSelectionModel().getSelectedItem(): requirementHolder.getReviewStatus());
+        evaluationStatusCombo.setValue(requirementHolder.getEvaluationStatus() == null ? evaluationStatusCombo.getSelectionModel().getSelectedItem(): requirementHolder.getEvaluationStatus());
+        evaluationMethodCombo.setValue(requirementHolder.getEvaluationMethod() == null ? evaluationMethodCombo.getSelectionModel().getSelectedItem(): requirementHolder.getEvaluationMethod());
+        qualityFactorCombo.setValue(requirementHolder.getQualityFactor());
         attachmentsArea.setText(requirementHolder.getAttachment());
     }
 
