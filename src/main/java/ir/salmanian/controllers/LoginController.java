@@ -2,16 +2,22 @@ package ir.salmanian.controllers;
 
 import ir.salmanian.services.UserService;
 import ir.salmanian.utils.UserHolder;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
     @FXML
     private TextField usernameField;
     @FXML
@@ -22,6 +28,41 @@ public class LoginController {
     private Button registerBtn;
     @FXML
     private Label errorLabel;
+
+    public LoginController() {
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        loginBtn.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE){
+                    loginBtn.fire();
+                    event.consume();
+                }
+
+            }
+        });
+        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER){
+                    loginBtn.fire();
+                    event.consume();
+                }
+            }
+        });
+        registerBtn.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER){
+                    registerBtn.fire();
+                    event.consume();
+                }
+            }
+        });
+    }
 
     public void onRegisterPageClick() throws IOException {
         ScreenController.getInstance().addScene("registerScene", "Register.fxml");
