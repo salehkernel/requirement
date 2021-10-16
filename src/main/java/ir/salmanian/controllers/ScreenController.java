@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -16,6 +18,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ScreenController {
+    private final static int MIN_WIDTH = 800;
+    private final static int MIN_HEIGHT = 600;
     private static ScreenController instance;
     private Map<String, Stage> stageMap = new HashMap<>();
     private Map<String, Scene> sceneMap = new HashMap<>();
@@ -76,9 +80,18 @@ public class ScreenController {
     }
 
     public void activateScene(String sceneKey, Stage stage) {
-        stage.setScene(sceneMap.get(sceneKey));
-        stage.setWidth(this.mainStage.getWidth());
-        stage.setHeight(this.mainStage.getHeight());
+        Scene scene = sceneMap.get(sceneKey);
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                }
+            }
+        });
+        stage.setScene(scene);
+        stage.setWidth(this.mainStage.getMinWidth());
+        stage.setHeight(this.mainStage.getMinHeight());
     }
 
     public Stage openNewStage(String stageKey) {
@@ -88,8 +101,10 @@ public class ScreenController {
         }
         Stage stage = new Stage();
         stage.setTitle("مدیریت نیازمندی‌‌ ها");
-        stage.setMinWidth(800);
-        stage.setMinHeight(600);
+        stage.setMinWidth(MIN_WIDTH);
+        stage.setMinHeight(MIN_HEIGHT);
+        stage.setMaximized(false);
+        stage.centerOnScreen();
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
