@@ -11,9 +11,10 @@ public class RequirementManagementApplication extends Application {
 
         DatabaseManagement.getInstance();
         ScreenController.getInstance().addScene("loginScene", "Login.fxml");
-        Stage stage = ScreenController.getInstance().openNewStage("mainStage");
-        ScreenController.getInstance().setMainStage(stage);
-        ScreenController.getInstance().activateScene("loginScene", stage);
+        Stage mainStage = ScreenController.getInstance().openNewStage("mainStage");
+        mainStage.setMaximized(true);
+        ScreenController.getInstance().setMainStage(mainStage);
+        ScreenController.getInstance().activateScene("loginScene", mainStage);
     }
 
     public static void main(String[] args) {
