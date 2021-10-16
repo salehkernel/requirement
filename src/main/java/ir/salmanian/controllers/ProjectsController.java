@@ -8,11 +8,13 @@ import ir.salmanian.utils.UserHolder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,6 +42,12 @@ public class ProjectsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         projectsListView.setItems(projectObservableList);
         projectsListView.setCellFactory(param -> new ProjectCell());
+        projectsListView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                projectsListView.getParent().fireEvent(event);
+            }
+        });
     }
 
     @FXML

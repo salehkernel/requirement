@@ -7,12 +7,14 @@ import ir.salmanian.utils.RequirementHolder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -53,6 +55,12 @@ public class SelectParentController implements Initializable {
         requirementListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         requirementListView.getItems().filtered(requirement -> requirementHolder.getParents().contains(requirement))
                 .forEach(requirement -> requirementListView.getSelectionModel().select(requirement));
+        requirementListView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                requirementListView.getParent().fireEvent(event);
+            }
+        });
         /*requirementListView.setCellFactory(
                 CheckBoxListCell.forListView(new Callback<Requirement, ObservableValue<Boolean>>() {
                     @Override

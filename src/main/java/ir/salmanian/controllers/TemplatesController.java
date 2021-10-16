@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -44,6 +45,12 @@ public class TemplatesController implements Initializable {
             e.printStackTrace();
         }
         templatesListView.setItems(paneObservableList);
+        templatesListView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                templatesListView.getParent().fireEvent(event);
+            }
+        });
     }
 
     private void parse() throws FileNotFoundException {

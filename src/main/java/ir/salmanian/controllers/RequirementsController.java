@@ -149,6 +149,12 @@ public class RequirementsController implements Initializable {
             });
             return treeCell;
         });
+        requirementTreeView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                requirementTreeView.getParent().fireEvent(event);
+            }
+        });
         searchRequirementField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {

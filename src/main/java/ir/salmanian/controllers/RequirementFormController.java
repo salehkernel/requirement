@@ -194,6 +194,19 @@ public class RequirementFormController implements Initializable {
             return listCell;
         });
 
+        parentRequirementListView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                parentRequirementListView.getParent().fireEvent(event);
+            }
+        });
+        childrenRequirementListView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                childrenRequirementListView.getParent().fireEvent(event);
+            }
+        });
+
         if (requirementHolder.getId() == null) {
             cancelBtn.setVisible(true);
             deleteBtn.setVisible(false);
