@@ -2,24 +2,53 @@ package ir.salmanian.controllers;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ScreenController {
+    private static ScreenController instance;
     private Map<String, Stage> stageMap = new HashMap<>();
     private Map<String, Scene> sceneMap = new HashMap<>();
     private Stage mainStage;
-    private static ScreenController instance;
+    private EventHandler<WindowEvent> closeEventHandler;
 
     private ScreenController() {
+        closeEventHandler = new EventHandler<WindowEvent>() {
+
+            private static final String OK_BTN_TEXT = "خروج";
+            private static final String CANCEL_BTN_TEXT = "انصراف";
+            private static final String DIALOG_TEXT = "آیا می خواهید از برنامه خارج شوید؟";
+
+            @Override
+            public void handle(WindowEvent event) {
+                showExitDialog();
+                event.consume();
+            }
+
+            private void showExitDialog() {
+                ButtonType ok = new ButtonType(OK_BTN_TEXT, ButtonBar.ButtonData.OK_DONE);
+                ButtonType cancel = new ButtonType(CANCEL_BTN_TEXT, ButtonBar.ButtonData.CANCEL_CLOSE);
+                Dialog exitDialog = new Dialog();
+                exitDialog.setContentText(DIALOG_TEXT);
+                exitDialog.getDialogPane().getButtonTypes().add(ok);
+                exitDialog.getDialogPane().getButtonTypes().add(cancel);
+                Optional<ButtonType> result = exitDialog.showAndWait();
+                if (result.isPresent()) {
+                    if (result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                        System.exit(0);
+                }
+            }
+        };
     }
 
     public static ScreenController getInstance() {
@@ -28,17 +57,21 @@ public class ScreenController {
         return instance;
     }
 
-    public void setMainStage(Stage mainStage) {
-        this.mainStage = mainStage;
-    }
-
     public Stage getMainStage() {
         return mainStage;
     }
 
+    public void setMainStage(Stage mainStage) {
+        mainStage.setOnCloseRequest(closeEventHandler);
+        this.mainStage = mainStage;
+
+    }
+
     public void addScene(String sceneKey, String fxmlFile) throws IOException {
-        Pane pane = FXMLLoader.load(getClass().getResource(String.format("/ui/%s", fxmlFile)));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(String.format("/ui/%s", fxmlFile)));
+        Pane pane = loader.load();
         Scene scene = new Scene(pane);
+        scene.setUserData(loader);
         sceneMap.put(sceneKey, scene);
     }
 
