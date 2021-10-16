@@ -4,10 +4,6 @@ import ir.salmanian.models.Requirement;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.ProjectHolder;
 import ir.salmanian.utils.RequirementHolder;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,14 +11,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 public class SelectParentController implements Initializable {
     @FXML
@@ -36,7 +32,6 @@ public class SelectParentController implements Initializable {
     @FXML
     private Button cancelBtn;
 
-    private Set<Requirement> selectedRequirements = new HashSet<>();
     private ObservableList<Requirement> requirementObservableList;
     private Requirement requirementHolder;
 
@@ -55,7 +50,10 @@ public class SelectParentController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         requirementListView.setItems(requirementObservableList);
-        requirementListView.setCellFactory(
+        requirementListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        requirementListView.getItems().filtered(requirement -> requirementHolder.getParents().contains(requirement))
+                .forEach(requirement -> requirementListView.getSelectionModel().select(requirement));
+        /*requirementListView.setCellFactory(
                 CheckBoxListCell.forListView(new Callback<Requirement, ObservableValue<Boolean>>() {
                     @Override
                     public ObservableValue<Boolean> call(Requirement param) {
@@ -91,7 +89,8 @@ public class SelectParentController implements Initializable {
                         return null;
                     }
                 })
-        );
+        );*/
+
     }
 
     @FXML
@@ -104,8 +103,9 @@ public class SelectParentController implements Initializable {
 
     @FXML
     public void onAddParentsClick(ActionEvent event) throws IOException {
-        Requirement[] a = selectedRequirements.toArray(new Requirement[]{});
-        requirementHolder.setParents(new ArrayList<>(selectedRequirements));
+//        Requirement[] a = selectedRequirements.toArray(new Requirement[]{});
+        requirementHolder.setParents(/*new ArrayList<>(selectedRequirements)*/requirementListView.getSelectionModel()
+                .getSelectedItems());
         if (requirementHolder.getId() == null) {
             ScreenController.getInstance().addScene("newRequirementFormScene", "RequirementForm.fxml");
             ScreenController.getInstance().activateScene("newRequirementFormScene", ScreenController.getInstance().getStage("newRequirementFormStage"));
