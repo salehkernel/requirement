@@ -27,13 +27,7 @@
             <Insets left="10.0" />
          </HBox.margin>
       </Button>
-      <TreeView fx:id="filterTreeView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
-         <VBox.margin>
-            <Insets bottom="5.0" />
-         </VBox.margin>
-      </TreeView>
-      <Button fx:id="filterBtn" layoutX="78.0" layoutY="320.0" mnemonicParsing="false" onAction="#onFilterClick" text="فیلتر" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="125.0" />
-      <ListView fx:id="requirementListView" layoutX="200.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="350.0" prefWidth="400.0" visible="false" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
-      <TreeView fx:id="requirementTreeView" layoutX="200.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="350.0" prefWidth="400.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <ListView fx:id="requirementListView" layoutX="200.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <TreeView fx:id="requirementTreeView" layoutX="200.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
    </children>
 </AnchorPane>
