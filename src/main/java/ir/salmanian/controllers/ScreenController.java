@@ -3,10 +3,10 @@ package ir.salmanian.controllers;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -84,8 +84,18 @@ public class ScreenController {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ESCAPE) {
-                    stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                switch (event.getCode()){
+                    case ESCAPE:
+                        stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                        break;
+                    case ENTER:
+                        if (scene.getFocusOwner() instanceof Button) {
+                            ((Button) scene.getFocusOwner()).fire();
+                        }
+                        else {
+                            scene.getFocusOwner().fireEvent(event);
+                        }
+                        break;
                 }
             }
         });
