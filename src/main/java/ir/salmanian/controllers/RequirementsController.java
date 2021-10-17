@@ -22,6 +22,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -35,9 +37,10 @@ import java.util.ResourceBundle;
 
 public class RequirementsController implements Initializable {
 
+    private final Clipboard clipboard = Clipboard.getSystemClipboard();
+    private final ClipboardContent clipboardContent = new ClipboardContent();
     @FXML
     private TextField searchRequirementField;
-
     @FXML
     private TreeView<Requirement> requirementTreeView;
     @FXML
@@ -118,15 +121,7 @@ public class RequirementsController implements Initializable {
                                 if (event instanceof MouseEvent) {
                                     if (((MouseEvent) event).getClickCount() == 2) {
                                         if (!event.isConsumed()) {
-                                            Requirement requirement = requirementTreeView.getSelectionModel().getSelectedItem().getValue();
-                                            RequirementHolder.getInstance().setRequirement(requirement);
-                                            Stage stage = ScreenController.getInstance().openNewStage(String.format("requirementFormStage-%d", requirement.getId()));
-                                            try {
-                                                ScreenController.getInstance().addScene(String.format("requirementFormScene-%d", requirement.getId()), "RequirementForm.fxml");
-                                                ScreenController.getInstance().activateScene(String.format("requirementFormScene-%d", requirement.getId()), stage);
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
+                                            openSelectedRequirementForm();
                                         }
                                         event.consume();
                                     }
@@ -152,13 +147,40 @@ public class RequirementsController implements Initializable {
         requirementTreeView.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                requirementTreeView.getParent().fireEvent(event);
+                switch (event.getCode()) {
+                    case ESCAPE:
+                        if (!requirementTreeView.getSelectionModel().isEmpty()) {
+                            requirementTreeView.getSelectionModel().clearSelection();
+                        } else {
+                            requirementTreeView.getParent().fireEvent(event);
+                        }
+                        break;
+                    case ENTER:
+                        openSelectedRequirementForm();
+                        break;
+                    case C:
+                        if (event.isControlDown()) {
+                            TreeItem<Requirement> selectedItem = requirementTreeView.getSelectionModel().getSelectedItem();
+                            clipboardContent.putString(selectedItem != null ? selectedItem.getValue().getTitle() : clipboardContent.getString());
+                            clipboard.setContent(clipboardContent);
+                        }
+                        break;
+                    case V:
+                        if (event.isControlDown()) {
+                            TreeItem<Requirement> selectedItem = requirementTreeView.getSelectionModel().getSelectedItem();
+                            if (selectedItem != null) {
+                                selectedItem.getValue().setTitle(clipboard.getString());
+                                openSelectedRequirementForm();
+                            }
+                        }
+                        break;
+                }
             }
         });
         searchRequirementField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                switch (event.getCode()){
+                switch (event.getCode()) {
                     case ENTER:
                         searchBtn.fire();
                         event.consume();
@@ -182,6 +204,21 @@ public class RequirementsController implements Initializable {
         }
         requirementTreeView.setRoot(rootItem);
         requirementTreeView.setShowRoot(false);
+    }
+
+    private void openSelectedRequirementForm() {
+        Requirement requirement = requirementTreeView.getSelectionModel().getSelectedItem().getValue();
+        RequirementHolder.getInstance().setRequirement(requirement);
+        Stage stage = ScreenController.getInstance().openNewStage(
+                String.format("requirementFormStage-%d", requirement.getId()));
+        try {
+            ScreenController.getInstance().addScene(
+                    String.format("requirementFormScene-%d", requirement.getId()), "RequirementForm.fxml");
+            ScreenController.getInstance().activateScene(
+                    String.format("requirementFormScene-%d", requirement.getId()), stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void refreshTreeItem(TreeItem<Requirement> root) {
