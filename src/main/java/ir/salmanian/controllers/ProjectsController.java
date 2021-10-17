@@ -58,7 +58,8 @@ public class ProjectsController implements Initializable {
 
     @FXML
     public void onSearchProjectClick(ActionEvent event) {
-        List<Project> projects = ProjectService.getInstance().searchProjects(searchField.getText().trim());
+        List<Project> projects = ProjectService.getInstance()
+                .searchProjects(searchField.getText().trim(), UserHolder.getInstance().getUser());
         projectObservableList.clear();
         projectObservableList.addAll(projects);
         projectsListView.setItems(projectObservableList);

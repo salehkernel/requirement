@@ -31,7 +31,7 @@ public class ProjectService {
         DatabaseManagement.getInstance().deleteProject(project);
     }
 
-    public List<Project> searchProjects(String text) {
-        return DatabaseManagement.getInstance().searchProjects(text);
+    public List<Project> searchProjects(String text, User user) {
+        return DatabaseManagement.getInstance().searchProjects(text, user);
     }
 }
