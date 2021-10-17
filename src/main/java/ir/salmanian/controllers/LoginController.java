@@ -28,40 +28,24 @@ public class LoginController implements Initializable {
     private Button registerBtn;
     @FXML
     private Label errorLabel;
+    private EventHandler<KeyEvent> defaultEnterKeyPressEventHandler;
 
     public LoginController() {
+        defaultEnterKeyPressEventHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER){
+                    loginBtn.fire();
+                    event.consume();
+                }
+            }
+        };
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loginBtn.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE){
-                    loginBtn.fire();
-                    event.consume();
-                }
-
-            }
-        });
-        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER){
-                    loginBtn.fire();
-                    event.consume();
-                }
-            }
-        });
-        registerBtn.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER){
-                    registerBtn.fire();
-                    event.consume();
-                }
-            }
-        });
+        usernameField.setOnKeyPressed(defaultEnterKeyPressEventHandler);
+        passwordField.setOnKeyPressed(defaultEnterKeyPressEventHandler);
     }
 
     public void onRegisterPageClick() throws IOException {
