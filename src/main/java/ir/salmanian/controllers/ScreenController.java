@@ -84,16 +84,17 @@ public class ScreenController {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                switch (event.getCode()){
+                switch (event.getCode()) {
                     case ESCAPE:
                         stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
                         break;
                     case ENTER:
                         if (scene.getFocusOwner() instanceof Button) {
                             ((Button) scene.getFocusOwner()).fire();
-                        }
-                        else {
-                            scene.getFocusOwner().fireEvent(event);
+                        } else {
+                            if (scene.getFocusOwner().getOnKeyPressed() != null) {
+                                scene.getFocusOwner().fireEvent(event);
+                            }
                         }
                         break;
                 }
