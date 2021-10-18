@@ -15,7 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,11 +24,10 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class TemplatesController implements Initializable {
+    private final File templatesFile;
     @FXML
     private ListView<Pane> templatesListView;
-
     private Requirement requirementHolder;
-    private final File templatesFile;
     private ObservableList<Pane> paneObservableList = FXCollections.observableArrayList();
 
     public TemplatesController() {
@@ -115,8 +113,7 @@ public class TemplatesController implements Initializable {
                         ScreenController.getInstance().addScene("newRequirementFormScene", "RequirementForm.fxml");
                         ScreenController.getInstance().activateScene("newRequirementFormScene", ScreenController.getInstance().getStage("newRequirementFormStage"));
                         ScreenController.getInstance().closeStage("selectTemplateStageNew");
-                    }
-                    else {
+                    } else {
                         ScreenController.getInstance().addScene(String.format("requirementFormScene-%d", requirementHolder.getId()), "RequirementForm.fxml");
                         ScreenController.getInstance().activateScene(
                                 String.format("requirementFormScene-%d", requirementHolder.getId()),
