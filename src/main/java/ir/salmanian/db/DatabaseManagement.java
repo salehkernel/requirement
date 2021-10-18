@@ -155,7 +155,7 @@ public class DatabaseManagement {
 
     public List<Requirement> getChildrenRequirements(Requirement requirement) {
         Session session = getSession();
-        String hql = "SELECT r FROM Requirement r JOIN r.parents p WHERE p=:requirement";
+        String hql = "SELECT r FROM Requirement r JOIN r.parents p WHERE p=:requirement ORDER BY r.level, r.id ASC";
         Query query = session.createQuery(hql);
         query.setParameter("requirement", requirement);
         List<Requirement> requirements = query.getResultList();
