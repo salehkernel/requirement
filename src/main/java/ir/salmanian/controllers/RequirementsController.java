@@ -45,6 +45,8 @@ public class RequirementsController implements Initializable {
     private TreeView<Requirement> requirementTreeView;
     @FXML
     private Button searchBtn;
+    @FXML
+    private Button createRequirementBtn;
     private ObservableList<Requirement> requirementObservableList;
     private ChangeListener<Boolean> treeViewChangeListener;
 
@@ -174,6 +176,10 @@ public class RequirementsController implements Initializable {
                             }
                         }
                         break;
+                    case N:
+                        if (event.isControlDown())
+                            createRequirementBtn.fire();
+                        break;
                 }
             }
         });
@@ -235,6 +241,8 @@ public class RequirementsController implements Initializable {
                 Requirement child = children.get(children.indexOf(childItem.getValue()));
                 children.remove(child);
                 childItem.setValue(child);
+                childItem.setExpanded(childItem.isExpanded() ||
+                        requirementTreeView.getSelectionModel().getSelectedItems().contains(childItem));
                 if (childItem.isExpanded()) {
                     refreshTreeItem(childItem);
                 }
