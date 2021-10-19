@@ -200,6 +200,39 @@ public class RequirementsController implements Initializable {
         });
     }
 
+    @FXML
+    public void onNewRequirementClick(ActionEvent event) throws IOException {
+        ObservableList<TreeItem<Requirement>> parentItems = requirementTreeView.getSelectionModel().getSelectedItems();
+        List<Requirement> parents = new ArrayList<>();
+        parentItems.forEach(parentItem -> {
+            parents.add(parentItem.getValue());
+        });
+        Requirement newRequirement = new Requirement();
+        newRequirement.setParents(parents);
+        RequirementHolder.getInstance().setRequirement(newRequirement);
+        Stage stage = ScreenController.getInstance().openNewStage("newRequirementFormStage");
+        if (stage.getScene() == null) {
+            ScreenController.getInstance().addScene("newRequirementFormScene", "RequirementForm.fxml");
+            ScreenController.getInstance().activateScene("newRequirementFormScene", stage);
+        }
+    }
+
+    @FXML
+    public void onReturnClick(ActionEvent event) throws IOException {
+        if (ScreenController.getInstance().getOpenStagesCount() > 1) {
+            ScreenController.getInstance().showReturnDialog();
+        } else {
+            ScreenController.getInstance()
+                    .activateScene("projectsScene", ScreenController.getInstance().getMainStage());
+        }
+    }
+
+    @FXML
+    public void onSearchClick(ActionEvent event) {
+        search();
+        prepareTreeView();
+    }
+
     private void prepareTreeView() {
         TreeItem<Requirement> rootItem = new TreeItem<>();
         for (Requirement req : requirementObservableList) {
@@ -263,34 +296,6 @@ public class RequirementsController implements Initializable {
 
     public void refreshTreeView() {
         refreshTreeItem(requirementTreeView.getRoot());
-    }
-
-    @FXML
-    public void onNewRequirementClick(ActionEvent event) throws IOException {
-        ObservableList<TreeItem<Requirement>> parentItems = requirementTreeView.getSelectionModel().getSelectedItems();
-        List<Requirement> parents = new ArrayList<>();
-        parentItems.forEach(parentItem -> {
-            parents.add(parentItem.getValue());
-        });
-        Requirement newRequirement = new Requirement();
-        newRequirement.setParents(parents);
-        RequirementHolder.getInstance().setRequirement(newRequirement);
-        Stage stage = ScreenController.getInstance().openNewStage("newRequirementFormStage");
-        if (stage.getScene() == null) {
-            ScreenController.getInstance().addScene("newRequirementFormScene", "RequirementForm.fxml");
-            ScreenController.getInstance().activateScene("newRequirementFormScene", stage);
-        }
-    }
-
-    @FXML
-    public void onReturnClick(ActionEvent event) throws IOException {
-        ScreenController.getInstance().activateScene("projectsScene", ScreenController.getInstance().getMainStage());
-    }
-
-    @FXML
-    public void onSearchClick(ActionEvent event) {
-        search();
-        prepareTreeView();
     }
 
     private void search() {
