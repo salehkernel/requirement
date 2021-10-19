@@ -1,9 +1,10 @@
 package ir.salmanian.controllers;
 
+import ir.salmanian.cells.ProjectCell;
 import ir.salmanian.models.Project;
 import ir.salmanian.models.User;
-import ir.salmanian.cells.ProjectCell;
 import ir.salmanian.services.ProjectService;
+import ir.salmanian.utils.ProjectHolder;
 import ir.salmanian.utils.UserHolder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +38,15 @@ public class ProjectsController implements Initializable {
         projectObservableList.addAll(projects);
     }
 
+    public static void openProject(Project project) {
+        try {
+            ProjectHolder.getInstance().setProject(project);
+            ScreenController.getInstance().addScene("requirementsScene", "Requirements.fxml");
+            ScreenController.getInstance().activateScene("requirementsScene", ScreenController.getInstance().getMainStage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -45,7 +55,20 @@ public class ProjectsController implements Initializable {
         projectsListView.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                projectsListView.getParent().fireEvent(event);
+                switch (event.getCode()) {
+                    case ENTER:
+                        if (!projectsListView.getSelectionModel().isEmpty()) {
+                            openProject(projectsListView.getSelectionModel().getSelectedItem());
+                        }
+                        break;
+                    case ESCAPE:
+                        if (!projectsListView.getSelectionModel().isEmpty() ||
+                                projectsListView.getFocusModel().getFocusedItem() != null) {
+                            projectsListView.getSelectionModel().clearSelection();
+                        } else {
+                            projectsListView.getParent().fireEvent(event);
+                        }
+                }
             }
         });
     }
