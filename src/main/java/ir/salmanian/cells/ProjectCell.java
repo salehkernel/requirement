@@ -1,12 +1,11 @@
 package ir.salmanian.cells;
 
-import ir.salmanian.controllers.ScreenController;
+import ir.salmanian.controllers.ProjectsController;
 import ir.salmanian.models.Project;
 import ir.salmanian.models.Requirement;
 import ir.salmanian.services.ProjectService;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.DocumentUtils;
-import ir.salmanian.utils.ProjectHolder;
 import ir.salmanian.utils.UserHolder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,17 +15,27 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.TableRowAlign;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ProjectCell extends ListCell<Project> {
     @FXML
@@ -98,6 +107,23 @@ public class ProjectCell extends ListCell<Project> {
                         updateItem(project, false);
                     }
                 });
+                projectNameField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent event) {
+                        switch (event.getCode()) {
+                            case ENTER:
+                                saveProjectBtn.fire();
+                                event.consume();
+                                break;
+                            case ESCAPE:
+                                cancelBtn.fire();
+                                event.consume();
+                                break;
+                        }
+                    }
+                });
+                setButtonDefaultKeyEventHandler(saveProjectBtn);
+                setButtonDefaultKeyEventHandler(cancelBtn);
             } else {
                 viewProjectPane.setVisible(true);
                 editProjectPane.setVisible(false);
@@ -106,13 +132,7 @@ public class ProjectCell extends ListCell<Project> {
                     @Override
                     public void handle(MouseEvent event) {
                         if (event.getClickCount() == 2) {
-                            try {
-                                ProjectHolder.getInstance().setProject(project);
-                                ScreenController.getInstance().addScene("requirementsScene", "Requirements.fxml");
-                                ScreenController.getInstance().activateScene("requirementsScene", ScreenController.getInstance().getMainStage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            ProjectsController.openProject(project);
                         }
 
                     }
@@ -122,7 +142,7 @@ public class ProjectCell extends ListCell<Project> {
                     public void handle(ActionEvent event) {
 
                         try {
-                            File file = chooseFile();
+                            File file = chooseExportedFile();
 
                             if (file != null) {
                                 if (!file.getName().endsWith(".docx")) {
@@ -130,7 +150,7 @@ public class ProjectCell extends ListCell<Project> {
                                 }
                                 XWPFDocument document = new XWPFDocument();
                                 FileOutputStream outputStream = new FileOutputStream(file);
-                                createDocumentTitle(document);
+                                writeDocumentTitle(document);
                                 writeRequirementsLevelByLevel(document);
                                 DocumentUtils.setDocumentFont(document, "Lateef");
                                 document.write(outputStream);
@@ -143,7 +163,7 @@ public class ProjectCell extends ListCell<Project> {
 
                     }
 
-                    private File chooseFile() {
+                    private File chooseExportedFile() {
                         FileChooser fileChooser = new FileChooser();
                         fileChooser.setInitialFileName(String.format("%s.docx", project.getName()));
                         fileChooser.setTitle("Export requirement word");
@@ -183,7 +203,7 @@ public class ProjectCell extends ListCell<Project> {
                         }
                     }
 
-                    private void createDocumentTitle(XWPFDocument document) {
+                    private void writeDocumentTitle(XWPFDocument document) {
                         XWPFParagraph paragraph = document.createParagraph();
                         XWPFRun run = paragraph.createRun();
                         run.setBold(true);
@@ -270,10 +290,32 @@ public class ProjectCell extends ListCell<Project> {
                         getListView().getItems().remove(project);
                     }
                 });
+                setButtonDefaultKeyEventHandler(exportBtn);
+                setButtonDefaultKeyEventHandler(editProjectBtn);
+                setButtonDefaultKeyEventHandler(deleteProjectBtn);
             }
             setText(null);
             setGraphic(pane);
         }
+    }
+
+    private void setButtonDefaultKeyEventHandler(Button button) {
+        button.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case ENTER:
+                        button.fire();
+                        event.consume();
+                        break;
+                    case ESCAPE:
+                    case UP:
+                    case DOWN:
+                        button.getParent().requestFocus();
+                        break;
+                }
+            }
+        });
     }
 
 
