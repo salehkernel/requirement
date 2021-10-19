@@ -9,7 +9,6 @@ import org.hibernate.cfg.Configuration;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.io.Serializable;
 import java.util.List;
 
 public class DatabaseManagement {
@@ -72,7 +71,7 @@ public class DatabaseManagement {
     }
 
     public List<Project> getUserProjects(User user) {
-        List<Project> projects = null;
+        List<Project> projects;
         Session session = getSession();
         String hql = "FROM Project p WHERE p.creator =:user";
 
@@ -131,7 +130,9 @@ public class DatabaseManagement {
 
     public List<Requirement> searchRequirements(String text, Project project) {
         Session session = getSession();
-        String hql = "FROM Requirement r WHERE r.project =:project AND (r.title LIKE :text OR CONCAT(r.prefix,'-',r.id) LIKE :text) ORDER BY r.level, r.id ASC";
+        String hql = "FROM Requirement r " +
+                "WHERE r.project =:project AND (r.title LIKE :text OR CONCAT(r.prefix,'-',r.id) LIKE :text) " +
+                "ORDER BY r.level, r.id ASC";
         Query query = session.createQuery(hql);
         query.setParameter("text", "%" + text + "%");
         query.setParameter("project", project);
