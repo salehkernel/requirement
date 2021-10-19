@@ -73,7 +73,7 @@ public class DatabaseManagement {
     public List<Project> getUserProjects(User user) {
         List<Project> projects;
         Session session = getSession();
-        String hql = "FROM Project p WHERE p.creator =:user";
+        String hql = "FROM Project p WHERE p.creator =:user ORDER BY p.id";
 
         Query query = session.createQuery(hql);
         query.setParameter("user", user);
@@ -101,7 +101,7 @@ public class DatabaseManagement {
 
     public List<Project> searchProjects(String text, User user) {
         Session session = getSession();
-        String hql = "FROM Project p WHERE p.name LIKE :text AND p.creator =:creator";
+        String hql = "FROM Project p WHERE p.name LIKE :text AND p.creator =:creator ORDER BY p.id";
         Query query = session.createQuery(hql);
         query.setParameter("text", "%" + text + "%");
         query.setParameter("creator", user);
