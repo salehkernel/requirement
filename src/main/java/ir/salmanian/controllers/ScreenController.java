@@ -29,28 +29,10 @@ public class ScreenController {
     private ScreenController() {
         closeEventHandler = new EventHandler<WindowEvent>() {
 
-            private static final String OK_BTN_TEXT = "خروج";
-            private static final String CANCEL_BTN_TEXT = "انصراف";
-            private static final String DIALOG_TEXT = "آیا می خواهید از برنامه خارج شوید؟";
-
             @Override
             public void handle(WindowEvent event) {
                 showExitDialog();
                 event.consume();
-            }
-
-            private void showExitDialog() {
-                ButtonType ok = new ButtonType(OK_BTN_TEXT, ButtonBar.ButtonData.OK_DONE);
-                ButtonType cancel = new ButtonType(CANCEL_BTN_TEXT, ButtonBar.ButtonData.CANCEL_CLOSE);
-                Dialog exitDialog = new Dialog();
-                exitDialog.setContentText(DIALOG_TEXT);
-                exitDialog.getDialogPane().getButtonTypes().add(ok);
-                exitDialog.getDialogPane().getButtonTypes().add(cancel);
-                Optional<ButtonType> result = exitDialog.showAndWait();
-                if (result.isPresent()) {
-                    if (result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE)
-                        System.exit(0);
-                }
             }
         };
     }
@@ -86,7 +68,9 @@ public class ScreenController {
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                     case ESCAPE:
-                        stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                        if (!sceneHasCancelBtn(scene)) {
+                            stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                        }
                         break;
                     case ENTER:
                         if (scene.getFocusOwner() instanceof Button) {
@@ -135,5 +119,41 @@ public class ScreenController {
     public void closeStage(String stageKey) {
         stageMap.get(stageKey).close();
         stageMap.remove(stageKey);
+    }
+
+    public int getOpenStagesCount() {
+        return stageMap.size();
+    }
+
+    public void showReturnDialog() {
+        final String okBtnText = "تأیید";
+        final String dialogText = "پنجره دیگری باز است لطفا آن را ببندید.";
+        ButtonType ok = new ButtonType(okBtnText, ButtonBar.ButtonData.OK_DONE);
+        Dialog returnDialog = new Dialog();
+        returnDialog.setContentText(dialogText);
+        returnDialog.getDialogPane().getButtonTypes().add(ok);
+        returnDialog.showAndWait();
+    }
+
+    private void showExitDialog() {
+        final String okBtnText = "خروج";
+        final String cancelBtnText = "انصراف";
+        final String dialogText = "آیا می خواهید از برنامه خارج شوید؟";
+        ButtonType ok = new ButtonType(okBtnText, ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType(cancelBtnText, ButtonBar.ButtonData.CANCEL_CLOSE);
+        Dialog exitDialog = new Dialog();
+        exitDialog.setContentText(dialogText);
+        exitDialog.getDialogPane().getButtonTypes().add(ok);
+        exitDialog.getDialogPane().getButtonTypes().add(cancel);
+        Optional<ButtonType> result = exitDialog.showAndWait();
+        if (result.isPresent()) {
+            if (result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                System.exit(0);
+        }
+    }
+
+    private boolean sceneHasCancelBtn(Scene scene) {
+        return scene.getRoot().getChildrenUnmodifiable().filtered(node -> node instanceof Button)
+                .filtered(node -> ((Button)node).isCancelButton()).size() > 0;
     }
 }
