@@ -12,7 +12,7 @@
       <ListView fx:id="requirementListView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="259.0" prefWidth="572.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0" />
       <HBox alignment="CENTER" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
          <children>
-            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="انصراف">
+            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="انصراف" cancelButton="true">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>

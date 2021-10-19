@@ -22,7 +22,7 @@
             <Insets left="10.0" />
          </HBox.margin>
       </TextField>
-      <Button fx:id="returnBtn" layoutX="526.0" layoutY="13.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onReturnClick" prefWidth="65.0" text="بازگشت" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <Button fx:id="returnBtn" layoutX="526.0" layoutY="13.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onReturnClick" prefWidth="65.0" text="بازگشت" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" cancelButton="true">
          <HBox.margin>
             <Insets left="10.0" />
          </HBox.margin>
