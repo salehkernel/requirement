@@ -3,9 +3,10 @@ package ir.salmanian.models;
 public enum EvaluationStatus {
     REJECT("رد"),
     ACCEPT("قبول"),
-    WAITING("انتظار");
+    WAITING("انتظار"),
+    MET("ملاقات شده");
 
-    private EvaluationStatus(String label) {
+    EvaluationStatus(String label) {
         this.label = label;
     }
 
