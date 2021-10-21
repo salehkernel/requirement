@@ -8,11 +8,12 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.salmanian.controllers.RequirementsController">
    <children>
-      <Button fx:id="createRequirementBtn" alignment="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#onNewRequirementClick" text="ایجاد نیازمندی" AnchorPane.leftAnchor="155.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="createRequirementBtn" alignment="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#onNewRequirementClick" prefWidth="95.0" text="ایجاد نیازمندی" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="20.0" />
       <Button fx:id="searchBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onSearchClick" text="جستجو" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="20.0" />
       <TextField fx:id="searchRequirementField" nodeOrientation="RIGHT_TO_LEFT" promptText="جستجوی نیازمندی" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
-      <Button fx:id="returnBtn" cancelButton="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onReturnClick" text="بازگشت" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="returnBtn" cancelButton="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onReturnClick" prefWidth="65.0" text="بازگشت" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="metRequiremetsBtn" mnemonicParsing="false" onAction="#onMetRequirementsClick" text="نیازمندی های ملاقات شده" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="20.0" />
       <ListView fx:id="requirementListView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
-      <TreeView fx:id="requirementTreeView" layoutX="210.0" layoutY="10.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <TreeView fx:id="requirementTreeView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
    </children>
 </AnchorPane>
