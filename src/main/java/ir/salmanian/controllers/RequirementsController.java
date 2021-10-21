@@ -1,9 +1,11 @@
 package ir.salmanian.controllers;
 
+import ir.salmanian.models.EvaluationStatus;
 import ir.salmanian.models.Requirement;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.ProjectHolder;
 import ir.salmanian.utils.RequirementHolder;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -55,16 +57,6 @@ public class RequirementsController implements Initializable {
         loadRequirements();
     }
 
-    private void loadRequirements() {
-        requirementObservableList = FXCollections.observableArrayList();
-        List<Requirement> requirements = RequirementService.getInstance().getRequirements(ProjectHolder.getInstance().getProject());
-        for (Requirement requirement : requirements) {
-            if (requirement.getLevel() == 1) {
-                requirementObservableList.add(requirement);
-            }
-        }
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         treeViewChangeListener = new ChangeListener<Boolean>() {
@@ -107,7 +99,6 @@ public class RequirementsController implements Initializable {
                 }
             }
         });*/
-
         requirementTreeView.setCellFactory(param -> {
             TreeCell<Requirement> treeCell = new TreeCell<Requirement>() {
                 @Override
@@ -115,6 +106,8 @@ public class RequirementsController implements Initializable {
                     super.updateItem(item, empty);
                     if (item != null && !empty) {
                         setText(item.toString());
+                        styleProperty().bind(Bindings.createStringBinding(
+                                () -> String.format("-fx-text-fill: %s;", getMetColor(item))));
                         updateTreeItem(getTreeItem());
                         EventDispatcher eventDispatcher = getEventDispatcher();
                         setEventDispatcher(new EventDispatcher() {
@@ -135,6 +128,9 @@ public class RequirementsController implements Initializable {
                         setText("");
                 }
 
+                private String getMetColor(Requirement item) {
+                    return item.getEvaluationStatus() == EvaluationStatus.MET ? "#00FF00" : "#000000";
+                }
             };
             treeCell.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override
@@ -233,6 +229,21 @@ public class RequirementsController implements Initializable {
         prepareTreeView();
     }
 
+    @FXML
+    public void onMetRequirementsClick(ActionEvent event) {
+        containsMetRequirement(requirementTreeView.getRoot());
+    }
+
+    private void loadRequirements() {
+        requirementObservableList = FXCollections.observableArrayList();
+        List<Requirement> requirements = RequirementService.getInstance().getRequirements(ProjectHolder.getInstance().getProject());
+        for (Requirement requirement : requirements) {
+            if (requirement.getLevel() == 1) {
+                requirementObservableList.add(requirement);
+            }
+        }
+    }
+
     private void prepareTreeView() {
         TreeItem<Requirement> rootItem = new TreeItem<>();
         for (Requirement req : requirementObservableList) {
@@ -243,6 +254,10 @@ public class RequirementsController implements Initializable {
         }
         requirementTreeView.setRoot(rootItem);
         requirementTreeView.setShowRoot(false);
+    }
+
+    public void refreshTreeView() {
+        refreshTreeItem(requirementTreeView.getRoot());
     }
 
     private void openSelectedRequirementForm() {
@@ -294,10 +309,6 @@ public class RequirementsController implements Initializable {
         }
     }
 
-    public void refreshTreeView() {
-        refreshTreeItem(requirementTreeView.getRoot());
-    }
-
     private void search() {
         requirementObservableList.clear();
         if (searchRequirementField.getText().trim().isEmpty()) {
@@ -314,5 +325,18 @@ public class RequirementsController implements Initializable {
             requirementObservableList.addAll(requirements);
 
         }
+    }
+
+    private boolean containsMetRequirement(TreeItem<Requirement> root) {
+        boolean isNowExpanded = root.isExpanded();
+        root.setExpanded(true);
+        boolean contains = false;
+        for (TreeItem<Requirement> child: root.getChildren()) {
+            if (containsMetRequirement(child) || child.getValue().getEvaluationStatus() == EvaluationStatus.MET) {
+                contains = true;
+            }
+        }
+        root.setExpanded(contains || isNowExpanded);
+        return contains;
     }
 }
