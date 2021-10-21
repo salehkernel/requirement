@@ -31,16 +31,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.commons.lang.WordUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class RequirementFormController implements Initializable {
     @FXML
@@ -88,9 +89,13 @@ public class RequirementFormController implements Initializable {
     private ObservableList<Requirement> childrenRequirementObservableList;
     private ObservableList<String> levelObservableList;
     private Requirement requirementHolder;
+    private boolean evaluationStatusShouldBeMet = false;
+    private boolean evaluationStatusCanBeMet = false;
 
     public RequirementFormController() {
         requirementHolder = RequirementHolder.getInstance().getRequirement();
+        evaluationStatusShouldBeMet = childrenAreMet(requirementHolder);
+        evaluationStatusCanBeMet = evaluationStatusCanBeMet(requirementHolder);
         Integer maxLevel = RequirementService.getInstance().getMaxLevel(ProjectHolder.getInstance().getProject());
         levelObservableList = FXCollections.observableArrayList();
         if (maxLevel == null)
@@ -244,14 +249,21 @@ public class RequirementFormController implements Initializable {
         attachmentsArea.setWrapText(true);
 
         int levelIndex = findParentsMaxLevel();
-        levelComboBox.setValue(requirementHolder.getPrefix() == null ? levelComboBox.getItems().get(levelIndex) : requirementHolder.getPrefix());
+        levelComboBox.setValue(requirementHolder.getPrefix() == null ?
+                levelComboBox.getItems().get(levelIndex) : requirementHolder.getPrefix());
         titleArea.setText(requirementHolder.getTitle());
-        priorityCombo.setValue(requirementHolder.getPriority() == null ? priorityCombo.getSelectionModel().getSelectedItem() : requirementHolder.getPriority());
-        requirementTypeCombo.setValue(requirementHolder.getRequirementType() == null ? requirementTypeCombo.getSelectionModel().getSelectedItem() : requirementHolder.getRequirementType());
-        changesCombo.setValue(requirementHolder.getChanges() == null ? changesCombo.getSelectionModel().getSelectedItem() : requirementHolder.getChanges());
-        reviewStatusCombo.setValue(requirementHolder.getReviewStatus() == null ? reviewStatusCombo.getSelectionModel().getSelectedItem() : requirementHolder.getReviewStatus());
-        evaluationStatusCombo.setValue(requirementHolder.getEvaluationStatus() == null ? evaluationStatusCombo.getSelectionModel().getSelectedItem() : requirementHolder.getEvaluationStatus());
-        evaluationMethodCombo.setValue(requirementHolder.getEvaluationMethod() == null ? evaluationMethodCombo.getSelectionModel().getSelectedItem() : requirementHolder.getEvaluationMethod());
+        priorityCombo.setValue(requirementHolder.getPriority() == null ?
+                priorityCombo.getSelectionModel().getSelectedItem() : requirementHolder.getPriority());
+        requirementTypeCombo.setValue(requirementHolder.getRequirementType() == null ?
+                requirementTypeCombo.getSelectionModel().getSelectedItem() : requirementHolder.getRequirementType());
+        changesCombo.setValue(requirementHolder.getChanges() == null ?
+                changesCombo.getSelectionModel().getSelectedItem() : requirementHolder.getChanges());
+        reviewStatusCombo.setValue(requirementHolder.getReviewStatus() == null ?
+                reviewStatusCombo.getSelectionModel().getSelectedItem() : requirementHolder.getReviewStatus());
+        evaluationStatusCombo.setValue(requirementHolder.getEvaluationStatus() == null ?
+                evaluationStatusCombo.getSelectionModel().getSelectedItem() : requirementHolder.getEvaluationStatus());
+        evaluationMethodCombo.setValue(requirementHolder.getEvaluationMethod() == null ?
+                evaluationMethodCombo.getSelectionModel().getSelectedItem() : requirementHolder.getEvaluationMethod());
         qualityFactorCombo.setValue(requirementHolder.getQualityFactor());
         attachmentsArea.setText(requirementHolder.getAttachment());
 
@@ -307,6 +319,14 @@ public class RequirementFormController implements Initializable {
             dialog.showAndWait();
             return;
         }
+        if (evaluationStatusShouldBeMet && evaluationStatusCombo.getValue() != EvaluationStatus.MET) {
+            showInappropriateEvaluationStatusDialog(evaluationStatusShouldBeMet);
+            return;
+        } else if (!evaluationStatusShouldBeMet && !evaluationStatusCanBeMet &&
+                evaluationStatusCombo.getValue() == EvaluationStatus.MET) {
+            showInappropriateEvaluationStatusDialog(evaluationStatusShouldBeMet);
+            return;
+        }
         Requirement illegalParent = findIllegalParent();
         if (illegalParent != null) {
             showIllegalParentDialog(illegalParent);
@@ -320,6 +340,7 @@ public class RequirementFormController implements Initializable {
             stageKey = String.format("requirementFormStage-%d", requirementHolder.getId());
         }
         RequirementService.getInstance().saveRequirement(requirementHolder);
+        updateParentsEvaluationStatus(requirementHolder);
         CloseStageAndFocusMainStage(stageKey);
 
     }
@@ -355,7 +376,7 @@ public class RequirementFormController implements Initializable {
         dialog.getDialogPane().getButtonTypes().add(remove);
         dialog.getDialogPane().getButtonTypes().add(cancel);
         Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() &&  result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE){
+        if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
             parentRequirementListView.getItems().remove(illegalParent);
         }
     }
@@ -364,7 +385,7 @@ public class RequirementFormController implements Initializable {
         Requirement illegalParent = null;
         for (Requirement parent :
                 parentRequirementListView.getItems()) {
-            if (parent.getLevel() != levelComboBox.getValue().length() -1) {
+            if (parent.getLevel() != levelComboBox.getValue().length() - 1) {
                 illegalParent = parent;
                 break;
             }
@@ -391,13 +412,67 @@ public class RequirementFormController implements Initializable {
 
     private int findParentsMaxLevel() {
         int parentsMaxLevel = 0;
-        if (!requirementHolder.getParents().isEmpty()){
+        if (!requirementHolder.getParents().isEmpty()) {
             for (Requirement parent : requirementHolder.getParents()) {
                 if (parent.getLevel() > parentsMaxLevel)
                     parentsMaxLevel = parent.getLevel();
             }
         }
         return parentsMaxLevel;
+    }
+
+    private boolean childrenAreMet(Requirement requirement) {
+        List<Requirement> children = RequirementService.getInstance().getChildrenRequirements(requirement);
+        if (children == null || children.isEmpty())
+            return false;
+        boolean childrenAreMet = true;
+        for (Requirement child : children) {
+            if (child.getEvaluationStatus() != EvaluationStatus.MET) {
+                childrenAreMet = false;
+                break;
+            }
+        }
+        return childrenAreMet;
+    }
+
+    private boolean evaluationStatusCanBeMet(Requirement requirement) {
+        List<Requirement> children = RequirementService.getInstance().getChildrenRequirements(requirement);
+        if (children == null || children.isEmpty())
+            return true;
+        return childrenAreMet(requirement);
+    }
+
+    private void showInappropriateEvaluationStatusDialog(boolean allChildrenAreMet) {
+        final String shouldBeMetDialogText = "تمام فرزندان این نیازمندی ملاقات شده‌اند.\n" +
+                "وضعیت ارزیابی این نیازمندی باید «ملاقات شده» باشد.";
+        final String shouldNotBeMetDialogText = "تمام فرزندان این نیازمندی ملاقات نشده اند.\n" +
+                "وضعیت ارزیابی این نیازمندی نمی تواند «ملاقات شده» باشد.";
+        final String okBtnText = "تأیید";
+        ButtonType ok = new ButtonType(okBtnText, ButtonBar.ButtonData.OK_DONE);
+        Dialog childrenAreMetDialog = new Dialog();
+        childrenAreMetDialog.setContentText(allChildrenAreMet ? shouldBeMetDialogText : shouldNotBeMetDialogText);
+        childrenAreMetDialog.getDialogPane().getButtonTypes().add(ok);
+        childrenAreMetDialog.showAndWait();
+    }
+
+    private void updateParentsEvaluationStatus(Requirement requirement) {
+        Set<Requirement> currentParents = new LinkedHashSet<>(requirement.getParents());
+        Set<Requirement> parentsOfParents = new LinkedHashSet<>();
+        while (!currentParents.isEmpty()) {
+            for (Requirement parent :
+                    currentParents) {
+                if (childrenAreMet(parent)) {
+                    parent.setEvaluationStatus(EvaluationStatus.MET);
+                    RequirementService.getInstance().saveRequirement(parent);
+                } else if (parent.getEvaluationStatus() == EvaluationStatus.MET) {
+                    parent.setEvaluationStatus(EvaluationStatus.WAITING);
+                    RequirementService.getInstance().saveRequirement(parent);
+                }
+                parentsOfParents.addAll(parent.getParents());
+            }
+            currentParents = parentsOfParents;
+            parentsOfParents = new LinkedHashSet<>();
+        }
     }
 
 }
