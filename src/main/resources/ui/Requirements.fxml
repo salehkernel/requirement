@@ -12,7 +12,7 @@
       <Button fx:id="searchBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onSearchClick" text="جستجو" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="20.0" />
       <TextField fx:id="searchRequirementField" nodeOrientation="RIGHT_TO_LEFT" promptText="جستجوی نیازمندی" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
       <Button fx:id="returnBtn" cancelButton="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onReturnClick" prefWidth="65.0" text="بازگشت" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
-      <Button fx:id="metRequiremetsBtn" mnemonicParsing="false" onAction="#onMetRequirementsClick" text="نیازمندی های ملاقات شده" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="metRequirementsBtn" mnemonicParsing="false" onAction="#onMetRequirementsClick" text="نیازمندی های ملاقات شده" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="20.0" />
       <ListView fx:id="requirementListView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
       <TreeView fx:id="requirementTreeView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
    </children>
