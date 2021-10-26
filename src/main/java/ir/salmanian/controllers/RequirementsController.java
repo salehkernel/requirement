@@ -113,7 +113,7 @@ public class RequirementsController implements Initializable {
                                 () -> concatAllStyles(getTextFillStyle(item))));
                         styleProperty().bind(Bindings.createStringBinding(
                                 () -> concatAllStyles(getBorderColorStyle(item), "-fx-border-radius: 5px;",
-                                        getBorderInsetsStyle(item), "-fx-indent: 0px;")
+                                        getBorderInsetsStyle(item), "-fx-indent: 0px;", "-fx-border-width: 0px 0px 1px 1px;")
                         ));
                         updateTreeItem(getTreeItem());
                         EventDispatcher eventDispatcher = getEventDispatcher();
@@ -141,16 +141,21 @@ public class RequirementsController implements Initializable {
 
                 private String getBorderColorStyle(Requirement requirement) {
                     String styleName = "-fx-border-color: ";
+                    String borderColor = getRequirementLevelColor(requirement);
+                    return String.format("%s%s;", styleName, borderColor);
+                }
+
+                private String getRequirementLevelColor(Requirement requirement) {
                     String borderColor = "";
                     switch (requirement.getLevel() % 10) {
                         case 1:
                             borderColor = "#6DA472";
                             break;
                         case 2:
-                            borderColor = "#0000FF";
+                            borderColor = "#D2B48C";
                             break;
                         case 3:
-                            borderColor = "#D2B48C";
+                            borderColor = "#0000FF";
                             break;
                         case 4:
                             borderColor = "#2E8B57";
@@ -159,10 +164,10 @@ public class RequirementsController implements Initializable {
                             borderColor = "#8B4513";
                             break;
                         case 6:
-                            borderColor = "#B0E0E6";
+                            borderColor = "#00FFFF";
                             break;
                         case 7:
-                            borderColor = "#00FFFF";
+                            borderColor = "#B0E0E6";
                             break;
                         case 8:
                             borderColor = "#DEB887";
@@ -175,7 +180,7 @@ public class RequirementsController implements Initializable {
                             break;
 
                     }
-                    return String.format("%s%s;", styleName, borderColor);
+                    return borderColor;
                 }
 
                 private String getTextFillStyle(Requirement requirement) {
