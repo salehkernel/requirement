@@ -4,12 +4,15 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "requirements")
+@XmlRootElement(name = "requirement")
+@XmlAccessorType(XmlAccessType.NONE)
 public class Requirement {
 
     @Id
@@ -18,35 +21,49 @@ public class Requirement {
             parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name", value = "requirement_value"),
                     @org.hibernate.annotations.Parameter(name = "initial_value", value = "1"),
                     @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")})
+    @XmlAttribute(name = "requirement-id")
     private Long id;
     @Column(name = "prefix")
+    @XmlElement(name = "prefix")
     private String prefix;
     @Column(name = "title")
+    @XmlElement(name = "title")
     private String title;
     @Column(name = "changes")
+    @XmlElement(name = "change")
     private Change changes;
     @Column(name = "priority")
+    @XmlElement(name = "priority")
     private Priority priority;
     @Column(name = "evaluation_method")
+    @XmlElement(name = "evaluation-method")
     private EvaluationMethod evaluationMethod;
     @Column(name = "evaluation_status")
+    @XmlElement(name = "evaluation-status")
     private EvaluationStatus evaluationStatus;
     @Column(name = "quality_factor")
+    @XmlElement(name = "quality-factor")
     private QualityFactor qualityFactor;
     @Column(name = "requirement_type")
+    @XmlElement(name = "requirement-type")
     private RequirementType requirementType;
     @Column(name = "review_status")
+    @XmlElement(name = "review-status")
     private ReviewStatus reviewStatus;
     @ManyToOne
     private Project project;
     @Column(name = "attachment")
     @Lob
+    @XmlElement(name = "attachment")
     private String attachment;
     @Column(name = "level")
     @ColumnDefault(value = "1")
+    @XmlElement(name = "level")
     private Integer level;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @XmlElementWrapper(name = "parents")
+    @XmlElement(name = "requirement")
     List<Requirement> parents = new ArrayList<>();
 
     public Long getId() {

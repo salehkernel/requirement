@@ -3,21 +3,28 @@ package ir.salmanian.models;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
 @Entity
 @Table(name = "projects")
+@XmlRootElement(name = "project")
+@XmlAccessorType(XmlAccessType.NONE)
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @XmlAttribute(name = "project-id")
     private Long id;
     @Column(name = "name")
+    @XmlElement(name = "name")
     private String name;
     @ManyToOne
     private User creator;
     @OneToMany(cascade = CascadeType.ALL)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @XmlElementWrapper(name = "requirements")
+    @XmlElement(name = "requirement")
     private List<Requirement> requirementList;
 
     @Transient
