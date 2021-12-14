@@ -11,7 +11,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Font;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +28,8 @@ public class LoginController implements Initializable {
     private Button registerBtn;
     @FXML
     private Label errorLabel;
+    @FXML
+    private AnchorPane loginPane;
     private EventHandler<KeyEvent> defaultEnterKeyPressEventHandler;
 
     public LoginController() {
@@ -44,6 +46,8 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        String backgroundPath = getClass().getResource("/img/login.jpeg").toExternalForm();
+        loginPane.setStyle("-fx-background-image: url(" + backgroundPath + ");-fx-background-size: cover;");
         usernameField.setOnKeyPressed(defaultEnterKeyPressEventHandler);
         passwordField.setOnKeyPressed(defaultEnterKeyPressEventHandler);
     }
@@ -51,6 +55,10 @@ public class LoginController implements Initializable {
     public void onRegisterPageClick() throws IOException {
         ScreenController.getInstance().addScene("registerScene", "Register.fxml");
         ScreenController.getInstance().activateScene("registerScene", ScreenController.getInstance().getMainStage());
+        errorLabel.setText("");
+        usernameField.setText("");
+        passwordField.setText("");
+        usernameField.requestFocus();
     }
 
     public void onLoginClick() throws IOException {
