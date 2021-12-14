@@ -1,5 +1,6 @@
 package ir.salmanian.controllers;
 
+import ir.salmanian.cells.RequirementTreeCell;
 import ir.salmanian.models.EvaluationStatus;
 import ir.salmanian.models.Requirement;
 import ir.salmanian.services.RequirementService;
@@ -86,7 +87,8 @@ public class RequirementsController implements Initializable {
         prepareTreeView();
         requirementTreeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         requirementTreeView.setCellFactory(param -> {
-            TreeCell<Requirement> treeCell = new TreeCell<Requirement>() {
+            TreeCell<Requirement> treeCell = new RequirementTreeCell();
+            /*TreeCell<Requirement> treeCell = new TreeCell<Requirement>() {
                 FlowPane pane;
                 ImageView requirementIcon;
                 Label requirementTitleLabel;
@@ -123,7 +125,7 @@ public class RequirementsController implements Initializable {
                                 if (event instanceof MouseEvent) {
                                     if (((MouseEvent) event).getClickCount() == 2) {
                                         if (!event.isConsumed()) {
-                                            openSelectedRequirementForm();
+                                            openRequirementForm(item);
                                         }
                                         event.consume();
                                     }
@@ -203,7 +205,7 @@ public class RequirementsController implements Initializable {
                     }
                     return allStyles.toString();
                 }
-            };
+            }*/;
             treeCell.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -226,7 +228,10 @@ public class RequirementsController implements Initializable {
                         }
                         break;
                     case ENTER:
-                        openSelectedRequirementForm();
+                        TreeItem<Requirement> selected;
+                        if ((selected = requirementTreeView.getSelectionModel().getSelectedItem()) != null) {
+                            openRequirementForm(selected.getValue());
+                        }
                         break;
                     case C:
                         if (event.isControlDown()) {
@@ -240,7 +245,7 @@ public class RequirementsController implements Initializable {
                             TreeItem<Requirement> selectedItem = requirementTreeView.getSelectionModel().getSelectedItem();
                             if (selectedItem != null) {
                                 selectedItem.getValue().setTitle(clipboard.getString());
-                                openSelectedRequirementForm();
+                                openRequirementForm(selectedItem.getValue());
                             }
                         }
                         break;
@@ -332,8 +337,7 @@ public class RequirementsController implements Initializable {
         refreshTreeItem(requirementTreeView.getRoot());
     }
 
-    private void openSelectedRequirementForm() {
-        Requirement requirement = requirementTreeView.getSelectionModel().getSelectedItem().getValue();
+    public static void openRequirementForm(Requirement requirement) {
         RequirementHolder.getInstance().setRequirement(requirement);
         Stage stage = ScreenController.getInstance().openNewStage(
                 String.format("requirementFormStage-%d", requirement.getId()));
