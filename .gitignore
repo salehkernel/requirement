@@ -1,4 +1,6 @@
 .idea
 target
 META-INF
+requirements_db
+derby.log
 requirement-management.iml
