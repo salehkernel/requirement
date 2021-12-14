@@ -2,15 +2,22 @@ package ir.salmanian.controllers;
 
 import ir.salmanian.models.User;
 import ir.salmanian.services.UserService;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class RegisterController {
+public class RegisterController implements Initializable {
     @FXML
     private TextField usernameField;
     @FXML
@@ -23,6 +30,31 @@ public class RegisterController {
     private Button registerBtn;
     @FXML
     private Label errorLabel;
+    @FXML
+    private AnchorPane registerPane;
+    private EventHandler<KeyEvent> defaultEnterKeyPressEventHandler;
+
+    public RegisterController() {
+        defaultEnterKeyPressEventHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER){
+                    registerBtn.fire();
+                    event.consume();
+                }
+            }
+        };
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        String backgroundPath = getClass().getResource("/img/login.jpeg").toExternalForm();
+        registerPane.setStyle("-fx-background-image: url(" + backgroundPath + "); -fx-background-size: cover;");
+        usernameField.setOnKeyPressed(defaultEnterKeyPressEventHandler);
+        passwordField.setOnKeyPressed(defaultEnterKeyPressEventHandler);
+        repeatPasswordField.setOnKeyPressed(defaultEnterKeyPressEventHandler);
+        emailField.setOnKeyPressed(defaultEnterKeyPressEventHandler);
+    }
 
     @FXML
     public void onRegisterClick() {
@@ -34,6 +66,12 @@ public class RegisterController {
             UserService.getInstance().registerUser(user);
             ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
         }
+    }
+
+    @FXML
+    public void onBackClick() throws IOException {
+        ScreenController.getInstance().addScene("loginScene", "Login.fxml");
+        ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
     }
 
     private boolean checkRepeatPassword() {
@@ -83,11 +121,5 @@ public class RegisterController {
             return true;
         }
         return false;
-    }
-
-    @FXML
-    public void onBackClick() throws IOException {
-        ScreenController.getInstance().addScene("loginScene", "Login.fxml");
-        ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
     }
 }
