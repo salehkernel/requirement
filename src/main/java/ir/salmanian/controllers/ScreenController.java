@@ -2,6 +2,7 @@ package ir.salmanian.controllers;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -9,13 +10,12 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ScreenController {
     private final static int MIN_WIDTH = 800;
@@ -25,6 +25,7 @@ public class ScreenController {
     private Map<String, Scene> sceneMap = new HashMap<>();
     private Stage mainStage;
     private EventHandler<WindowEvent> closeEventHandler;
+    private Set<String> mainStageSceneKeys = new LinkedHashSet<>();
 
     private ScreenController() {
         closeEventHandler = new EventHandler<WindowEvent>() {
@@ -35,6 +36,10 @@ public class ScreenController {
                 event.consume();
             }
         };
+        mainStageSceneKeys.add("loginScene");
+        mainStageSceneKeys.add("registerScene");
+        mainStageSceneKeys.add("projectsScene");
+        mainStageSceneKeys.add("requirementsScene");
     }
 
     public static ScreenController getInstance() {
@@ -56,7 +61,14 @@ public class ScreenController {
     public void addScene(String sceneKey, String fxmlFile) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(String.format("/ui/%s", fxmlFile)));
         Pane pane = loader.load();
-        Scene scene = new Scene(pane);
+        Scene scene;
+        if (mainStageSceneKeys.contains(sceneKey)) {
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getBounds();
+            scene = new Scene(pane, bounds.getWidth(), bounds.getHeight());
+        } else {
+            scene = new Scene(pane);
+        }
         scene.setUserData(loader);
         sceneMap.put(sceneKey, scene);
     }
@@ -85,8 +97,15 @@ public class ScreenController {
             }
         });
         stage.setScene(scene);
-        stage.setWidth(this.mainStage.getMinWidth());
-        stage.setHeight(this.mainStage.getMinHeight());
+        if (mainStageSceneKeys.contains(sceneKey)) {
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getBounds();
+            stage.setWidth(bounds.getWidth());
+            stage.setHeight(bounds.getHeight());
+        } else {
+            stage.setWidth(this.mainStage.getMinWidth());
+            stage.setHeight(this.mainStage.getMinHeight());
+        }
     }
 
     public Stage openNewStage(String stageKey) {
@@ -154,6 +173,6 @@ public class ScreenController {
 
     private boolean sceneHasCancelBtn(Scene scene) {
         return scene.getRoot().getChildrenUnmodifiable().filtered(node -> node instanceof Button)
-                .filtered(node -> ((Button)node).isCancelButton()).size() > 0;
+                .filtered(node -> ((Button) node).isCancelButton()).size() > 0;
     }
 }
