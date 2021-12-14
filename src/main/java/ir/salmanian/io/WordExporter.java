@@ -15,7 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WordExporter implements Exporter{
+public class WordExporter implements Exporter {
     private Project project;
 
     public WordExporter(Project project) {
