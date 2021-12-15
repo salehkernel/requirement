@@ -1,6 +1,8 @@
 package ir.salmanian.controllers;
 
 import ir.salmanian.cells.ProjectCell;
+import ir.salmanian.io.Importer;
+import ir.salmanian.io.XMLImporter;
 import ir.salmanian.models.Project;
 import ir.salmanian.models.User;
 import ir.salmanian.services.ProjectService;
@@ -16,7 +18,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -32,6 +37,10 @@ public class ProjectsController implements Initializable {
     private ObservableList<Project> projectObservableList;
 
     public ProjectsController() {
+        refreshProjectsList();
+    }
+
+    private void refreshProjectsList() {
         projectObservableList = FXCollections.observableArrayList();
         User user = UserHolder.getInstance().getUser();
         List<Project> projects = ProjectService.getInstance().getUserProjects(user);
@@ -93,6 +102,21 @@ public class ProjectsController implements Initializable {
         ScreenController.getInstance().addScene("loginScene", "Login.fxml");
         ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
         UserHolder.getInstance().setUser(null);
+    }
+
+    @FXML
+    public void onImportClick(ActionEvent event) {
+        Importer xmlImporter = new XMLImporter();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("import project");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("xml files (*.xml)", "*.xml"));
+        Stage stage = new Stage();
+        File importingFile = fileChooser.showOpenDialog(stage);
+        xmlImporter.importFromFile(importingFile);
+        refreshProjectsList();
+        projectsListView.setItems(projectObservableList);
+        projectsListView.refresh();
     }
 
 }
