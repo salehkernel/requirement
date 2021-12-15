@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.UUID;
 
 public class DatabaseManagement {
 
@@ -37,6 +38,10 @@ public class DatabaseManagement {
     public void saveUser(User user) {
         Session session = getSession();
         session.beginTransaction();
+        if (user.getId() == null) {
+            user.setId(UUID.randomUUID());
+            user.setNumber(getNextUserNumber());
+        }
         session.save(user);
         session.getTransaction().commit();
         session.close();
@@ -73,7 +78,7 @@ public class DatabaseManagement {
     public List<Project> getUserProjects(User user) {
         List<Project> projects;
         Session session = getSession();
-        String hql = "FROM Project p WHERE p.creator =:user ORDER BY p.id";
+        String hql = "FROM Project p WHERE p.creator =:user ORDER BY p.number";
 
         Query query = session.createQuery(hql);
         query.setParameter("user", user);
@@ -86,6 +91,10 @@ public class DatabaseManagement {
     public void saveProject(Project project) {
         Session session = getSession();
         session.beginTransaction();
+        if (project.getId() == null) {
+            project.setId(UUID.randomUUID());
+            project.setNumber(getNextProjectNumber(project.getCreator()));
+        }
         session.saveOrUpdate(project);
         session.getTransaction().commit();
         session.close();
@@ -101,7 +110,7 @@ public class DatabaseManagement {
 
     public List<Project> searchProjects(String text, User user) {
         Session session = getSession();
-        String hql = "FROM Project p WHERE p.name LIKE :text AND p.creator =:creator ORDER BY p.id";
+        String hql = "FROM Project p WHERE p.name LIKE :text AND p.creator =:creator ORDER BY p.number";
         Query query = session.createQuery(hql);
         query.setParameter("text", "%" + text + "%");
         query.setParameter("creator", user);
@@ -112,7 +121,7 @@ public class DatabaseManagement {
 
     public List<Requirement> getProjectRequirements(Project project) {
         Session session = getSession();
-        String hql = "FROM Requirement r WHERE r.project =:project ORDER BY r.level,r.id ASC";
+        String hql = "FROM Requirement r WHERE r.project =:project ORDER BY r.level,r.number ASC";
         Query query = session.createQuery(hql);
         query.setParameter("project", project);
         List<Requirement> requirements = query.getResultList();
@@ -123,6 +132,13 @@ public class DatabaseManagement {
     public void saveRequirement(Requirement requirement) {
         Session session = getSession();
         session.beginTransaction();
+        if (requirement.getId() == null) {
+            requirement.setId(UUID.randomUUID());
+            Project project = requirement.getProject();
+            requirement.setNumber(getNextRequirementNumber(project));
+            project.setLastRequirementNumber(requirement.getNumber());
+            saveProject(project);
+        }
         session.saveOrUpdate(requirement);
         session.getTransaction().commit();
         session.close();
@@ -131,8 +147,8 @@ public class DatabaseManagement {
     public List<Requirement> searchRequirements(String text, Project project) {
         Session session = getSession();
         String hql = "FROM Requirement r " +
-                "WHERE r.project =:project AND (r.title LIKE :text OR CONCAT(r.prefix,'-',r.id) LIKE :text) " +
-                "ORDER BY r.level, r.id ASC";
+                "WHERE r.project =:project AND (r.title LIKE :text OR CONCAT(r.prefix,'-',r.number) LIKE :text) " +
+                "ORDER BY r.level, r.number ASC";
         Query query = session.createQuery(hql);
         query.setParameter("text", "%" + text + "%");
         query.setParameter("project", project);
@@ -156,7 +172,7 @@ public class DatabaseManagement {
 
     public List<Requirement> getChildrenRequirements(Requirement requirement) {
         Session session = getSession();
-        String hql = "SELECT r FROM Requirement r JOIN r.parents p WHERE p=:requirement ORDER BY r.level, r.id ASC";
+        String hql = "SELECT r FROM Requirement r JOIN r.parents p WHERE p=:requirement ORDER BY r.level, r.number ASC";
         Query query = session.createQuery(hql);
         query.setParameter("requirement", requirement);
         List<Requirement> requirements = query.getResultList();
@@ -172,5 +188,35 @@ public class DatabaseManagement {
         Integer maxLevel = (Integer) query.getSingleResult();
         session.close();
         return maxLevel;
+    }
+
+    public Integer getNextUserNumber() {
+        Session session = getSession();
+        String hql = "SELECT MAX(u.number) FROM User u";
+        Query query = session.createQuery(hql);
+        Integer lastUserNumber = (Integer) query.getSingleResult();
+        session.close();
+        return lastUserNumber != null ? lastUserNumber + 1 : 1;
+    }
+
+    public Integer getNextProjectNumber(User user) {
+        Session session = getSession();
+        String hql = "SELECT MAX(p.number) FROM Project p WHERE p.creator =:user";
+        Query query = session.createQuery(hql);
+        query.setParameter("user", user);
+        Integer lastProjectNumber = (Integer) query.getSingleResult();
+        session.close();
+        return lastProjectNumber != null ? lastProjectNumber + 1 : 1;
+    }
+
+    public Integer getNextRequirementNumber(Project project) {
+        Session session = getSession();
+        String hql = "SELECT p.lastRequirementNumber FROM Project p WHERE p =:project";
+        Query query = session.createQuery(hql);
+        query.setParameter("project", project);
+        Integer lastRequirementNumber = (Integer) query.getSingleResult();
+        session.close();
+        return lastRequirementNumber != null ? lastRequirementNumber + 1 : 1;
+
     }
 }
