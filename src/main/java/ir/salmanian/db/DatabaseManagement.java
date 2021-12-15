@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class DatabaseManagement {
 
@@ -147,14 +148,14 @@ public class DatabaseManagement {
     public List<Requirement> searchRequirements(String text, Project project) {
         Session session = getSession();
         String hql = "FROM Requirement r " +
-                "WHERE r.project =:project AND (r.title LIKE :text OR CONCAT(r.prefix,'-',r.number) LIKE :text) " +
+                "WHERE r.project =:project " +
                 "ORDER BY r.level, r.number ASC";
         Query query = session.createQuery(hql);
-        query.setParameter("text", "%" + text + "%");
         query.setParameter("project", project);
         List<Requirement> requirements = query.getResultList();
         session.close();
-        return requirements;
+        return requirements.stream().filter(requirement -> (requirement.toString().contains(text)))
+                .collect(Collectors.toList());
     }
 
     public void deleteRequirement(Requirement requirement) {
