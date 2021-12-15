@@ -109,7 +109,7 @@ public class WordExporter implements Exporter {
                 XWPFTable table = document.createTable(5, 4);
                 table.setTableAlignment(TableRowAlign.RIGHT);
                 XWPFTableRow row1 = table.getRow(0);
-                row1.getCell(0).setText(String.format("شماره: %s-%s", requirement.getPrefix(), requirement.getId()));
+                row1.getCell(0).setText(String.format("شماره: %s-%d", requirement.getPrefix(), requirement.getNumber()));
                 row1.getCell(1).setText(String.format("عنوان: %s", requirement.getTitle()));
                 row1.setCantSplitRow(true);
                 XWPFTableRow row2 = table.getRow(1);
@@ -124,11 +124,11 @@ public class WordExporter implements Exporter {
                 row3.getCell(2).setText(String.format("وضعیت ارزیابی: %s", requirement.getEvaluationStatus() == null ? "" : requirement.getEvaluationStatus().label));
                 String parentsNumbers = "";
                 for (Requirement parent : requirement.getParents()) {
-                    parentsNumbers += String.format("%s-%s, ", parent.getPrefix(), parent.getId());
+                    parentsNumbers += String.format("%s-%d, ", parent.getPrefix(), parent.getNumber());
                 }
                 String childrenNumbers = "";
                 for (Requirement child : RequirementService.getInstance().getChildrenRequirements(requirement)) {
-                    childrenNumbers += String.format("%s-%s, ", child.getPrefix(), child.getId());
+                    childrenNumbers += String.format("%s-%d, ", child.getPrefix(), child.getNumber());
                 }
                 row3.setCantSplitRow(true);
                 XWPFTableRow row4 = table.getRow(3);
