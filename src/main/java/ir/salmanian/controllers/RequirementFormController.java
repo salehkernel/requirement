@@ -284,15 +284,15 @@ public class RequirementFormController implements Initializable {
             ScreenController.getInstance().addScene("newSelectParentScene", "SelectParent.fxml");
             ScreenController.getInstance().activateScene("newSelectParentScene", stage);
         } else {
-            Stage stage = ScreenController.getInstance().openNewStage(String.format("selectParentStage-%d", requirementHolder.getId()));
-            ScreenController.getInstance().addScene(String.format("selectParentScene-%d", requirementHolder.getId()), "SelectParent.fxml");
-            ScreenController.getInstance().activateScene(String.format("selectParentScene-%d", requirementHolder.getId()), stage);
+            Stage stage = ScreenController.getInstance().openNewStage(String.format("selectParentStage-%s", requirementHolder.getId()));
+            ScreenController.getInstance().addScene(String.format("selectParentScene-%s", requirementHolder.getId()), "SelectParent.fxml");
+            ScreenController.getInstance().activateScene(String.format("selectParentScene-%s", requirementHolder.getId()), stage);
         }
     }
 
     @FXML
     public void onDeleteClick() throws IOException {
-        String stageKey = String.format("requirementFormStage-%d", requirementHolder.getId());
+        String stageKey = String.format("requirementFormStage-%s", requirementHolder.getId());
         RequirementService.getInstance().deleteRequirement(requirementHolder);
         CloseStageAndFocusMainStage(stageKey);
     }
@@ -337,7 +337,7 @@ public class RequirementFormController implements Initializable {
         if (requirementHolder.getId() == null) {
             stageKey = "newRequirementFormStage";
         } else {
-            stageKey = String.format("requirementFormStage-%d", requirementHolder.getId());
+            stageKey = String.format("requirementFormStage-%s", requirementHolder.getId());
         }
         RequirementService.getInstance().saveRequirement(requirementHolder);
         updateParentsEvaluationStatus(requirementHolder);
@@ -353,9 +353,9 @@ public class RequirementFormController implements Initializable {
             ScreenController.getInstance().addScene("selectTemplateSceneNew", "Templates.fxml");
             ScreenController.getInstance().activateScene("selectTemplateSceneNew", stage);
         } else {
-            Stage stage = ScreenController.getInstance().openNewStage(String.format("selectTemplateStage-%d", requirementHolder.getId()));
-            ScreenController.getInstance().addScene(String.format("selectTemplateScene-%d", requirementHolder.getId()), "Templates.fxml");
-            ScreenController.getInstance().activateScene(String.format("selectTemplateScene-%d", requirementHolder.getId()), stage);
+            Stage stage = ScreenController.getInstance().openNewStage(String.format("selectTemplateStage-%s", requirementHolder.getId()));
+            ScreenController.getInstance().addScene(String.format("selectTemplateScene-%s", requirementHolder.getId()), "Templates.fxml");
+            ScreenController.getInstance().activateScene(String.format("selectTemplateScene-%s", requirementHolder.getId()), stage);
         }
     }
 

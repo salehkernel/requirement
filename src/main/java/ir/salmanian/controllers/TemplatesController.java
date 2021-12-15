@@ -114,12 +114,12 @@ public class TemplatesController implements Initializable {
                         ScreenController.getInstance().activateScene("newRequirementFormScene", ScreenController.getInstance().getStage("newRequirementFormStage"));
                         ScreenController.getInstance().closeStage("selectTemplateStageNew");
                     } else {
-                        ScreenController.getInstance().addScene(String.format("requirementFormScene-%d", requirementHolder.getId()), "RequirementForm.fxml");
+                        ScreenController.getInstance().addScene(String.format("requirementFormScene-%s", requirementHolder.getId()), "RequirementForm.fxml");
                         ScreenController.getInstance().activateScene(
-                                String.format("requirementFormScene-%d", requirementHolder.getId()),
+                                String.format("requirementFormScene-%s", requirementHolder.getId()),
                                 ScreenController.getInstance().getStage(
-                                        String.format("requirementFormStage-%d", requirementHolder.getId())));
-                        ScreenController.getInstance().closeStage(String.format("selectTemplateStage-%d", requirementHolder.getId()));
+                                        String.format("requirementFormStage-%s", requirementHolder.getId())));
+                        ScreenController.getInstance().closeStage(String.format("selectTemplateStage-%s", requirementHolder.getId()));
                     }
 
                 } catch (IOException e) {

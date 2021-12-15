@@ -106,7 +106,7 @@ public class SelectParentController implements Initializable {
         if (requirementHolder.getId() == null)
             ScreenController.getInstance().closeStage("newSelectParentStage");
         else
-            ScreenController.getInstance().closeStage(String.format("selectParentStage-%d", requirementHolder.getId()));
+            ScreenController.getInstance().closeStage(String.format("selectParentStage-%s", requirementHolder.getId()));
     }
 
     @FXML
@@ -119,9 +119,9 @@ public class SelectParentController implements Initializable {
             ScreenController.getInstance().activateScene("newRequirementFormScene", ScreenController.getInstance().getStage("newRequirementFormStage"));
             ScreenController.getInstance().closeStage("newSelectParentStage");
         } else {
-            ScreenController.getInstance().addScene(String.format("requirementFormScene-%d", requirementHolder.getId()), "RequirementForm.fxml");
-            ScreenController.getInstance().activateScene(String.format("requirementFormScene-%d", requirementHolder.getId()), ScreenController.getInstance().getStage(String.format("requirementFormStage-%d", requirementHolder.getId())));
-            ScreenController.getInstance().closeStage(String.format("selectParentStage-%d", requirementHolder.getId()));
+            ScreenController.getInstance().addScene(String.format("requirementFormScene-%s", requirementHolder.getId()), "RequirementForm.fxml");
+            ScreenController.getInstance().activateScene(String.format("requirementFormScene-%s", requirementHolder.getId()), ScreenController.getInstance().getStage(String.format("requirementFormStage-%s", requirementHolder.getId())));
+            ScreenController.getInstance().closeStage(String.format("selectParentStage-%s", requirementHolder.getId()));
         }
     }
 

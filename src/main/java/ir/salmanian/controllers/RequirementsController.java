@@ -340,12 +340,12 @@ public class RequirementsController implements Initializable {
     public static void openRequirementForm(Requirement requirement) {
         RequirementHolder.getInstance().setRequirement(requirement);
         Stage stage = ScreenController.getInstance().openNewStage(
-                String.format("requirementFormStage-%d", requirement.getId()));
+                String.format("requirementFormStage-%s", requirement.getId()));
         try {
             ScreenController.getInstance().addScene(
-                    String.format("requirementFormScene-%d", requirement.getId()), "RequirementForm.fxml");
+                    String.format("requirementFormScene-%s", requirement.getId()), "RequirementForm.fxml");
             ScreenController.getInstance().activateScene(
-                    String.format("requirementFormScene-%d", requirement.getId()), stage);
+                    String.format("requirementFormScene-%s", requirement.getId()), stage);
         } catch (IOException e) {
             e.printStackTrace();
         }
