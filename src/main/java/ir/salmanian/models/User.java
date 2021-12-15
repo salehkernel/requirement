@@ -2,29 +2,31 @@ package ir.salmanian.models;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
     @Column(name = "username")
     private String username;
     @Column(name = "password")
     private String password;
     @Column(name = "email")
     private String email;
+    @Column(name = "number")
+    private Integer number;
 
     @OneToMany
     private List<Project> projects;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public User setId(Long id) {
+    public User setId(UUID id) {
         this.id = id;
         return this;
     }
@@ -62,6 +64,15 @@ public class User {
 
     public User setProjects(List<Project> projects) {
         this.projects = projects;
+        return this;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public User setNumber(Integer number) {
+        this.number = number;
         return this;
     }
 }

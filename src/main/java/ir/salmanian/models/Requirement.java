@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "requirements")
@@ -16,13 +17,8 @@ import java.util.Objects;
 public class Requirement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence-generator")
-    @GenericGenerator(name = "sequence-generator", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name", value = "requirement_value"),
-                    @org.hibernate.annotations.Parameter(name = "initial_value", value = "1"),
-                    @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")})
     @XmlAttribute(name = "requirement-id")
-    private Long id;
+    private UUID id;
     @Column(name = "prefix")
     @XmlElement(name = "prefix")
     private String prefix;
@@ -60,17 +56,20 @@ public class Requirement {
     @ColumnDefault(value = "1")
     @XmlElement(name = "level")
     private Integer level;
+    @Column(name = "number")
+    @XmlElement(name = "number")
+    private Integer number;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @XmlElementWrapper(name = "parents")
     @XmlElement(name = "requirement")
     List<Requirement> parents = new ArrayList<>();
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public Requirement setId(Long id) {
+    public Requirement setId(UUID id) {
         this.id = id;
         return this;
     }
@@ -192,6 +191,15 @@ public class Requirement {
         return this;
     }
 
+    public Integer getNumber() {
+        return number;
+    }
+
+    public Requirement setNumber(Integer number) {
+        this.number = number;
+        return this;
+    }
+
     @Override
     public String toString() {
         String prefix = "";
@@ -199,7 +207,7 @@ public class Requirement {
             prefix = prefix + "S";
         }
         prefix = prefix + "R";
-        return prefix + "-" + id + " " + title;
+        return prefix + "-" + number + " " + title;
     }
 
     @Override
