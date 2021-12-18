@@ -3,8 +3,9 @@ package ir.salmanian.services;
 import ir.salmanian.db.DatabaseManagement;
 import ir.salmanian.models.Project;
 import ir.salmanian.models.Requirement;
+import ir.salmanian.utils.ProjectHolder;
 
-import javax.xml.crypto.Data;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +46,9 @@ public class RequirementService {
 
     public Integer getMaxLevel(Project project) {
         return DatabaseManagement.getInstance().getMaxLevel(project);
+    }
+
+    public List<Requirement> filter(Field field, List<Object> values) {
+        return DatabaseManagement.getInstance().filter(ProjectHolder.getInstance().getProject(), field, values);
     }
 }

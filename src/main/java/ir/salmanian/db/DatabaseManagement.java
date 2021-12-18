@@ -9,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -219,5 +220,30 @@ public class DatabaseManagement {
         session.close();
         return lastRequirementNumber != null ? lastRequirementNumber + 1 : 1;
 
+    }
+
+    public List<Requirement> filter(Project project, Field field, List values) {
+        if (values == null || values.isEmpty()) {
+            System.out.println("empty list for " + field.getName());
+            return null;
+        }
+        Session session = getSession();
+        String whereClause = "WHERE project =:project AND (";
+        for (int i = 0; i < values.size(); i++) {
+            if (i == values.size() - 1)
+                whereClause = String.format("%s%s%s%d%s",whereClause,field.getName()," =:value",i,")");
+            else
+                whereClause = String.format("%s%s%s%d%s",whereClause,field.getName()," =:value",i," OR ");
+        }
+        String hql = "FROM Requirement " + whereClause + " ORDER BY level, number";
+        Query query = session.createQuery(hql);
+        query.setParameter("project", project);
+        for (int i = 0; i < values.size(); i++) {
+            String param = "value" + i;
+            query.setParameter(param, values.get(i));
+        }
+        List<Requirement> filtered = query.getResultList();
+        session.close();
+        return filtered;
     }
 }
