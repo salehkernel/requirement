@@ -1,48 +1,39 @@
 package ir.salmanian.controllers;
 
+import ir.salmanian.cells.FilterTreeCell;
 import ir.salmanian.cells.RequirementTreeCell;
-import ir.salmanian.models.EvaluationStatus;
-import ir.salmanian.models.Requirement;
+import ir.salmanian.filter.Filter;
+import ir.salmanian.filter.FilterItem;
+import ir.salmanian.filter.FilterName;
+import ir.salmanian.models.*;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.ProjectHolder;
 import ir.salmanian.utils.RequirementHolder;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventDispatchChain;
-import javafx.event.EventDispatcher;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import org.apache.commons.lang.WordUtils;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RequirementsController implements Initializable {
 
@@ -53,15 +44,19 @@ public class RequirementsController implements Initializable {
     @FXML
     private TreeView<Requirement> requirementTreeView;
     @FXML
+    private TreeView<Filter<Object>> filterTreeView;
+    @FXML
     private Button searchBtn;
     @FXML
     private Button createRequirementBtn;
     private ObservableList<Requirement> requirementObservableList;
+    private ObservableList<Filter> filterObservableList;
     private ChangeListener<Boolean> treeViewChangeListener;
 
     public RequirementsController() {
 
         loadRequirements();
+        loadFilters();
     }
 
     @Override
@@ -84,128 +79,16 @@ public class RequirementsController implements Initializable {
             }
         };
 
-        prepareTreeView();
+        prepareRequirementsTreeView();
+        prepareFilterTreeView();
+        filterTreeView.setCellFactory(param -> {
+            TreeCell<Filter<Object>> cell = new FilterTreeCell();
+            return cell;
+        });
         requirementTreeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         requirementTreeView.setCellFactory(param -> {
             TreeCell<Requirement> treeCell = new RequirementTreeCell();
-            /*TreeCell<Requirement> treeCell = new TreeCell<Requirement>() {
-                FlowPane pane;
-                ImageView requirementIcon;
-                Label requirementTitleLabel;
 
-                @Override
-                public void updateItem(Requirement item, boolean empty) {
-                    super.updateItem(item, empty);
-                    pane = new FlowPane(Orientation.HORIZONTAL, 15, 15);
-                    requirementIcon = new ImageView();
-                    requirementTitleLabel = new Label();
-                    if (item != null && !empty) {
-                        requirementTitleLabel.setText(item.toString());
-                        requirementTitleLabel.setWrapText(true);
-                        try {
-                            requirementIcon.setImage(new Image(getClass()
-                                    .getResource(String.format("/img/%s.png", item.getLevel() == 1 ? "user" : "system"))
-                                    .toURI().toString()));
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        }
-                        pane.getChildren().add(requirementIcon);
-                        pane.getChildren().add(requirementTitleLabel);
-                        requirementTitleLabel.styleProperty().bind(Bindings.createStringBinding(
-                                () -> concatAllStyles(getTextFillStyle(item))));
-                        styleProperty().bind(Bindings.createStringBinding(
-                                () -> concatAllStyles(getBorderColorStyle(item), "-fx-border-radius: 5px;",
-                                        getBorderInsetsStyle(item), "-fx-indent: 0px;", "-fx-border-width: 0px 0px 1px 1px;")
-                        ));
-                        updateTreeItem(getTreeItem());
-                        EventDispatcher eventDispatcher = getEventDispatcher();
-                        pane.setEventDispatcher(new EventDispatcher() {
-                            @Override
-                            public Event dispatchEvent(Event event, EventDispatchChain tail) {
-                                if (event instanceof MouseEvent) {
-                                    if (((MouseEvent) event).getClickCount() == 2) {
-                                        if (!event.isConsumed()) {
-                                            openRequirementForm(item);
-                                        }
-                                        event.consume();
-                                    }
-                                }
-                                return eventDispatcher.dispatchEvent(event, tail);
-                            }
-                        });
-                        setGraphic(pane);
-                    } else {
-                        setText("");
-                        setGraphic(null);
-                        styleProperty().bind(Bindings.createStringBinding(() -> ""));
-                    }
-                }
-
-                private String getBorderColorStyle(Requirement requirement) {
-                    String styleName = "-fx-border-color: ";
-                    String borderColor = getRequirementLevelColor(requirement);
-                    return String.format("%s%s;", styleName, borderColor);
-                }
-
-                private String getRequirementLevelColor(Requirement requirement) {
-                    String borderColor = "";
-                    switch (requirement.getLevel() % 10) {
-                        case 1:
-                            borderColor = "#6DA472";
-                            break;
-                        case 2:
-                            borderColor = "#D2B48C";
-                            break;
-                        case 3:
-                            borderColor = "#0000FF";
-                            break;
-                        case 4:
-                            borderColor = "#2E8B57";
-                            break;
-                        case 5:
-                            borderColor = "#8B4513";
-                            break;
-                        case 6:
-                            borderColor = "#00FFFF";
-                            break;
-                        case 7:
-                            borderColor = "#B0E0E6";
-                            break;
-                        case 8:
-                            borderColor = "#DEB887";
-                            break;
-                        case 9:
-                            borderColor = "#708090";
-                            break;
-                        case 0:
-                            borderColor = "#8A2BE2";
-                            break;
-
-                    }
-                    return borderColor;
-                }
-
-                private String getTextFillStyle(Requirement requirement) {
-                    String styleName = "-fx-text-fill: ";
-                    String fillColor = requirement.getEvaluationStatus() == EvaluationStatus.MET ? "green" : "black";
-                    return String.format("%s%s;", styleName, fillColor);
-                }
-
-                private String getBorderInsetsStyle(Requirement requirement) {
-                    String styleName = "-fx-border-insets: ";
-                    String value = String.format("1px 1px 1px %dpx", (requirement.getLevel() - 1) * 25 + 1);
-                    return String.format("%s%s;", styleName, value);
-                }
-
-                private String concatAllStyles(String... styles) {
-                    StringBuilder allStyles = new StringBuilder("");
-                    for (String style : styles) {
-                        if (style != null)
-                            allStyles.append(style);
-                    }
-                    return allStyles.toString();
-                }
-            }*/;
             treeCell.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -303,7 +186,7 @@ public class RequirementsController implements Initializable {
     @FXML
     public void onSearchClick(ActionEvent event) {
         search();
-        prepareTreeView();
+        prepareRequirementsTreeView();
     }
 
     @FXML
@@ -311,9 +194,45 @@ public class RequirementsController implements Initializable {
         containsMetRequirement(requirementTreeView.getRoot());
     }
 
+    @FXML
+    public void onFilterClick(ActionEvent event) {
+        System.out.println("filter");
+        Set<Requirement> filteredSet = new LinkedHashSet<>();
+        boolean emptySelection = true;
+        for (Filter<Object> filter : filterObservableList) {
+            if (!emptySelection)
+                break;
+            for (FilterItem<Object> item : filter.getItems()) {
+                if (item.isSelected()) {
+                    emptySelection = false;
+                    break;
+                }
+            }
+        }
+        for (Filter<Object> filter : filterObservableList) {
+            List<Object> selectedValues = filter.getItems().stream().filter(item -> item.isSelected())
+                    .map(item -> item.getItem()).collect(Collectors.toList());
+            List<Requirement> filtered = RequirementService.getInstance().filter(filter.getField(), selectedValues);
+            if (filtered != null)
+                filteredSet.addAll(filtered);
+        }
+        if (!emptySelection) {
+            requirementObservableList.clear();
+            requirementObservableList.addAll(filteredSet.stream().sorted((r1, r2) -> {
+                if (r1.getLevel() == r2.getLevel())
+                    return Integer.compare(r1.getNumber(), r2.getNumber());
+                else
+                    return Integer.compare(r1.getLevel(), r2.getLevel());
+            }).collect(Collectors.toList()));
+        } else
+            loadRequirements();
+        prepareRequirementsTreeView();
+    }
+
     private void loadRequirements() {
         requirementObservableList = FXCollections.observableArrayList();
-        List<Requirement> requirements = RequirementService.getInstance().getRequirements(ProjectHolder.getInstance().getProject());
+        List<Requirement> requirements = RequirementService.getInstance()
+                .getRequirements(ProjectHolder.getInstance().getProject());
         for (Requirement requirement : requirements) {
             if (requirement.getLevel() == 1) {
                 requirementObservableList.add(requirement);
@@ -321,7 +240,50 @@ public class RequirementsController implements Initializable {
         }
     }
 
-    private void prepareTreeView() {
+    private void loadFilters() {
+        filterObservableList = FXCollections.observableArrayList();
+        try {
+            Filter<Priority> priorityFilter = new Filter<>(FilterName.PRIORITY,
+                    Requirement.class.getDeclaredField("priority"),
+                    Arrays.asList(Priority.values()).stream().map(value -> new FilterItem<>(value))
+                            .collect(Collectors.toList()));
+            Filter<RequirementType> typeFilter = new Filter<>(FilterName.REQUIREMENT_TYPE,
+                    Requirement.class.getDeclaredField("requirementType"),
+                    Arrays.asList(RequirementType.values()).stream().map(value -> new FilterItem<>(value))
+                            .collect(Collectors.toList()));
+            Filter<Change> changeFilter = new Filter<>(FilterName.CHANGE,
+                    Requirement.class.getDeclaredField("changes"),
+                    Arrays.asList(Change.values()).stream().map(value -> new FilterItem<>(value))
+                            .collect(Collectors.toList()));
+            Filter<ReviewStatus> reviewStatusFilter = new Filter<>(FilterName.REVIEW_STATUS,
+                    Requirement.class.getDeclaredField("reviewStatus"),
+                    Arrays.asList(ReviewStatus.values()).stream().map(value -> new FilterItem<>(value))
+                            .collect(Collectors.toList()));
+            Filter<EvaluationStatus> evaluationStatusFilter = new Filter<>(FilterName.EVALUATION_STATUS,
+                    Requirement.class.getDeclaredField("evaluationStatus"),
+                    Arrays.asList(EvaluationStatus.values()).stream().map(value -> new FilterItem<>(value))
+                            .collect(Collectors.toList()));
+            Filter<EvaluationMethod> evaluationMethodFilter = new Filter<>(FilterName.EVALUATION_METHOD,
+                    Requirement.class.getDeclaredField("evaluationMethod"),
+                    Arrays.asList(EvaluationMethod.values()).stream().map(value -> new FilterItem<>(value))
+                            .collect(Collectors.toList()));
+            Filter<QualityFactor> qualityFactorFilter = new Filter<>(FilterName.QUALITY_FACTOR,
+                    Requirement.class.getDeclaredField("qualityFactor"),
+                    Arrays.asList(QualityFactor.values()).stream().map(value -> new FilterItem<>(value))
+                            .collect(Collectors.toList()));
+            filterObservableList.add(priorityFilter);
+            filterObservableList.add(typeFilter);
+            filterObservableList.add(changeFilter);
+            filterObservableList.add(reviewStatusFilter);
+            filterObservableList.add(evaluationStatusFilter);
+            filterObservableList.add(evaluationMethodFilter);
+            filterObservableList.add(qualityFactorFilter);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void prepareRequirementsTreeView() {
         TreeItem<Requirement> rootItem = new TreeItem<>();
         for (Requirement req : requirementObservableList) {
             TreeItem<Requirement> item = new TreeItem<>(req);
@@ -331,6 +293,19 @@ public class RequirementsController implements Initializable {
         }
         requirementTreeView.setRoot(rootItem);
         requirementTreeView.setShowRoot(false);
+    }
+
+    private void prepareFilterTreeView() {
+        TreeItem<Filter<Object>> rootItem = new TreeItem<>();
+        for (Filter filter : filterObservableList) {
+            TreeItem<Filter<Object>> parentItem = new TreeItem<>(filter);
+            TreeItem<Filter<Object>> childItem = new TreeItem<>(new Filter(null, filter.getField(), filter.getItems()));
+            parentItem.getChildren().add(childItem);
+            rootItem.getChildren().add(parentItem);
+            parentItem.setExpanded(true);
+        }
+        filterTreeView.setRoot(rootItem);
+        filterTreeView.setShowRoot(false);
     }
 
     public void refreshTreeView() {
