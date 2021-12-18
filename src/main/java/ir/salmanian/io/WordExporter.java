@@ -4,6 +4,9 @@ import ir.salmanian.models.Project;
 import ir.salmanian.models.Requirement;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.DocumentUtils;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.poi.xwpf.usermodel.*;
@@ -35,12 +38,17 @@ public class WordExporter implements Exporter {
                 FileOutputStream outputStream = new FileOutputStream(file);
                 writeDocumentTitle(document);
                 writeRequirementsLevelByLevel(document);
-                DocumentUtils.setDocumentFont(document, "Lateef");
+                DocumentUtils.setDocumentFont(document, "B Nazanin");
                 document.write(outputStream);
                 outputStream.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Dialog exceptionDialog = new Dialog();
+            ButtonType ok = new ButtonType("تأیید", ButtonBar.ButtonData.OK_DONE);
+            exceptionDialog.setContentText("فایل مورد نظر توسط برنامه دیگری در حال استفاده استفاده است.\n لطفا مجددا تلاش نمایید.");
+            exceptionDialog.getDialogPane().getButtonTypes().add(ok);
+            exceptionDialog.showAndWait();
         }
     }
 
@@ -88,7 +96,7 @@ public class WordExporter implements Exporter {
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
         run.setBold(true);
-        run.setFontFamily("IRnazanin");
+        run.setFontFamily("B Nazanin");
         run.setFontSize(20);
         run.setText(String.format("سند نیازمندی های %s", project.getName()));
         paragraph.setAlignment(ParagraphAlignment.CENTER);
@@ -102,26 +110,31 @@ public class WordExporter implements Exporter {
             XWPFRun run = paragraph.createRun();
             paragraph.setAlignment(ParagraphAlignment.START);
             DocumentUtils.setParagraphRTL(paragraph);
+            DocumentUtils.setRunFont(run, "B Nazanin", 12, true, false);
             run.setText(String.format("نیازمندی‌های سطح %d", level));
             run.addBreak();
             for (Requirement requirement : requirements) {
                 DocumentUtils.setParagraphNotSplit(paragraph);
                 XWPFTable table = document.createTable(5, 4);
                 table.setTableAlignment(TableRowAlign.RIGHT);
+                table.setWidth("100%");
                 XWPFTableRow row1 = table.getRow(0);
-                row1.getCell(0).setText(String.format("شماره: %s-%d", requirement.getPrefix(), requirement.getNumber()));
-                row1.getCell(1).setText(String.format("عنوان: %s", requirement.getTitle()));
+                row1.getCell(0).setText(String.format(getPersianText("شماره:") + " %s-%d", requirement.getPrefix(), requirement.getNumber()));
+                row1.getCell(1).setText(String.format(getPersianText("عنوان:") + " %s", requirement.getTitle()));
+                row1.getCell(2).setText("");
+                row1.getCell(3).setText("");
                 row1.setCantSplitRow(true);
                 XWPFTableRow row2 = table.getRow(1);
-                row2.getCell(0).setText(String.format("اولویت: %s", requirement.getPriority() == null ? "" : requirement.getPriority().label));
-                row2.getCell(1).setText(String.format("نوع نیازمندی: %s", requirement.getRequirementType() == null ? "" : requirement.getRequirementType().label));
-                row2.getCell(2).setText(String.format("فاکتور کیفی: %s", requirement.getQualityFactor() == null ? "" : requirement.getQualityFactor().toString().toLowerCase()));
-                row2.getCell(3).setText(String.format("تغییرات: %s", requirement.getChanges() == null ? "" : requirement.getChanges().label));
+                row2.getCell(0).setText(String.format(getPersianText("اولویت:") + " %s", requirement.getPriority() == null ? "" : requirement.getPriority().label));
+                row2.getCell(1).setText(String.format(getPersianText("نوع نیازمندی:") + " %s", requirement.getRequirementType() == null ? "" : requirement.getRequirementType().label));
+                row2.getCell(2).setText(String.format(getPersianText("فاکتور کیفی:") + " %s", requirement.getQualityFactor() == null ? "" : requirement.getQualityFactor().toString().toLowerCase()));
+                row2.getCell(3).setText(String.format(getPersianText("تغییرات:") + " %s", requirement.getChanges() == null ? "" : requirement.getChanges().label));
                 row2.setCantSplitRow(true);
                 XWPFTableRow row3 = table.getRow(2);
-                row3.getCell(0).setText(String.format("وضعیت بازبینی: %s", requirement.getReviewStatus() == null ? "" : requirement.getReviewStatus().label));
-                row3.getCell(1).setText(String.format("روش ارزیابی: %s", requirement.getEvaluationMethod() == null ? "" : requirement.getEvaluationMethod().label));
-                row3.getCell(2).setText(String.format("وضعیت ارزیابی: %s", requirement.getEvaluationStatus() == null ? "" : requirement.getEvaluationStatus().label));
+                row3.getCell(0).setText(String.format(getPersianText("وضعیت بازبینی:") + " %s", requirement.getReviewStatus() == null ? "" : requirement.getReviewStatus().label));
+                row3.getCell(1).setText(String.format(getPersianText("روش ارزیابی:") + " %s", requirement.getEvaluationMethod() == null ? "" : requirement.getEvaluationMethod().label));
+                row3.getCell(2).setText(String.format(getPersianText("وضعیت ارزیابی:") + " %s", requirement.getEvaluationStatus() == null ? "" : requirement.getEvaluationStatus().label));
+                row3.getCell(3).setText("");
                 String parentsNumbers = "";
                 for (Requirement parent : requirement.getParents()) {
                     parentsNumbers += String.format("%s-%d, ", parent.getPrefix(), parent.getNumber());
@@ -132,12 +145,16 @@ public class WordExporter implements Exporter {
                 }
                 row3.setCantSplitRow(true);
                 XWPFTableRow row4 = table.getRow(3);
-                row4.getCell(0).setText(String.format("نیازهای والد: %s", parentsNumbers));
+                row4.getCell(0).setText(String.format(getPersianText("نیازهای والد:") + " %s", parentsNumbers));
                 row4.getCell(1).setText("");
-                row4.getCell(2).setText(String.format("نیازهای فرزند: %s", childrenNumbers));
+                row4.getCell(2).setText(String.format(getPersianText("نیازهای فرزند:") + " %s", childrenNumbers));
+                row4.getCell(3).setText("");
                 row4.setCantSplitRow(true);
                 XWPFTableRow row5 = table.getRow(4);
-                row5.getCell(0).setText(String.format("پیوست: %s", requirement.getAttachment()));
+                row5.getCell(0).setText(String.format(getPersianText("پیوست:") + " %s", requirement.getAttachment()));
+                row5.getCell(1).setText("");
+                row5.getCell(2).setText("");
+                row5.getCell(3).setText("");
                 row5.setCantSplitRow(true);
                 DocumentUtils.mergeHorizontally(table, 0, 1, 3);
                 DocumentUtils.mergeHorizontally(table, 2, 2, 3);
@@ -145,15 +162,16 @@ public class WordExporter implements Exporter {
                 DocumentUtils.mergeHorizontally(table, 3, 2, 3);
                 DocumentUtils.mergeHorizontally(table, 4, 0, 3);
                 DocumentUtils.setTableR2L(table);
+                DocumentUtils.setTableFont(table, "B Nazanin", 12, false, false);
 
                 paragraph = document.createParagraph();
                 run = paragraph.createRun();
                 run.addBreak();
             }
-            paragraph = document.createParagraph();
-            run = paragraph.createRun();
-            run.addBreak();
-
         }
+    }
+
+    private String getPersianText(String text) {
+        return "\u202E" + text + "\u202C";
     }
 }
