@@ -31,7 +31,6 @@ public class TemplatesController implements Initializable {
     public TemplatesController() {
         requirementHolder = RequirementHolder.getInstance().getRequirement();
         templateInputStreamReader = new InputStreamReader(getClass().getResourceAsStream("/templates.txt"), StandardCharsets.UTF_8);
-        System.out.println(templateInputStreamReader != null);
     }
 
     @Override
@@ -55,7 +54,6 @@ public class TemplatesController implements Initializable {
         String line;
         try {
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
                 String text = "";
                 FlowPane pane = new FlowPane();
                 pane.setHgap(10);
