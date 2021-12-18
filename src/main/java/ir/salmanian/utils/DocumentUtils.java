@@ -30,10 +30,7 @@ public class DocumentUtils {
             for (int j = 0; j < table.getRow(i).getTableCells().size(); j++) {
                 if (table.getRow(i).getCell(j).getParagraphs().size() > 0) {
                     paragraph = table.getRow(i).getCell(j).getParagraphs().get(0);
-                    CTP ctp = paragraph.getCTP();
-                    CTPPr ctppr = ctp.getPPr();
-                    if (ctppr == null) ctppr = ctp.addNewPPr();
-                    ctppr.addNewBidi().setVal(STOnOff1.ON);
+                    setParagraphRTL(paragraph);
                 }
             }
         }
@@ -57,5 +54,22 @@ public class DocumentUtils {
         fonts.setEastAsia(fontName);
         fonts.setHAnsi(fontName);
         styles.setDefaultFonts(fonts);
+    }
+
+    public static void setRunFont(XWPFRun run, String fontFamily, int fontSize, boolean bold, boolean italic) {
+        run.setFontFamily(fontFamily);
+        run.setFontSize(fontSize);
+        run.setBold(bold);
+        run.setItalic(italic);
+    }
+    
+    public static void setTableFont(XWPFTable table, String fontFamily, int fontSize, boolean bold, boolean italic) {
+        for (int i = 0; i < table.getNumberOfRows(); i++) {
+            for (int j = 0; j < table.getRow(i).getTableCells().size(); j++) {
+                for (XWPFParagraph paragraph : table.getRow(i).getCell(j).getParagraphs()) {
+                    paragraph.getRuns().forEach(run -> setRunFont(run, fontFamily, fontSize, bold, italic));
+                }
+            }
+        }
     }
 }
