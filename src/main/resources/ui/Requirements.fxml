@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.salmanian.controllers.RequirementsController">
    <children>
@@ -15,7 +17,22 @@
       <Button fx:id="metRequirementsBtn" mnemonicParsing="false" onAction="#onMetRequirementsClick" text="مشاهده نیازمندی های ملاقات شده" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="20.0" />
       <Button mnemonicParsing="false" text="مشاهده نیازمندی های ضروری" AnchorPane.leftAnchor="415.0" AnchorPane.topAnchor="20.0" />
       <Button mnemonicParsing="false" text="مشاهده نیازمندی های کارکردی" AnchorPane.leftAnchor="605.0" AnchorPane.topAnchor="20.0" />
-      <ListView fx:id="requirementListView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
-      <TreeView fx:id="requirementTreeView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <ListView fx:id="requirementListView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="750.0" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <TreeView fx:id="requirementTreeView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="400.0" prefWidth="480.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+      <AnchorPane fx:id="filterPane" prefHeight="400.0" prefWidth="260.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
+         <children>
+            <HBox alignment="CENTER_RIGHT" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="filterLabel" alignment="CENTER" text="فیلتر بر اساس:" />
+               </children>
+            </HBox>
+            <TreeView fx:id="filterTreeView" nodeOrientation="RIGHT_TO_LEFT" prefHeight="340.0" prefWidth="260.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+            <HBox alignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Button fx:id="filterBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onFilterClick" text="فیلتر" textAlignment="CENTER" />
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
