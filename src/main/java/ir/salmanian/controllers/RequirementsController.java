@@ -18,12 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
@@ -49,6 +44,11 @@ public class RequirementsController implements Initializable {
     private Button searchBtn;
     @FXML
     private Button createRequirementBtn;
+    @FXML
+    private RadioButton orRadioBtn;
+    @FXML
+    private RadioButton andRadioBtn;
+    private ToggleGroup filterToggleGroup;
     private ObservableList<Requirement> requirementObservableList;
     private ObservableList<Filter> filterObservableList;
     private ChangeListener<Boolean> treeViewChangeListener;
@@ -57,6 +57,7 @@ public class RequirementsController implements Initializable {
 
         loadRequirements();
         loadFilters();
+        filterToggleGroup = new ToggleGroup();
     }
 
     @Override
@@ -85,6 +86,9 @@ public class RequirementsController implements Initializable {
             TreeCell<Filter<Object>> cell = new FilterTreeCell();
             return cell;
         });
+        andRadioBtn.setToggleGroup(filterToggleGroup);
+        orRadioBtn.setToggleGroup(filterToggleGroup);
+        filterToggleGroup.selectToggle(orRadioBtn);
         requirementTreeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         requirementTreeView.setCellFactory(param -> {
             TreeCell<Requirement> treeCell = new RequirementTreeCell();
@@ -196,8 +200,7 @@ public class RequirementsController implements Initializable {
 
     @FXML
     public void onFilterClick(ActionEvent event) {
-        System.out.println("filter");
-        Set<Requirement> filteredSet = new LinkedHashSet<>();
+
         boolean emptySelection = true;
         for (Filter<Object> filter : filterObservableList) {
             if (!emptySelection)
@@ -209,14 +212,15 @@ public class RequirementsController implements Initializable {
                 }
             }
         }
-        for (Filter<Object> filter : filterObservableList) {
-            List<Object> selectedValues = filter.getItems().stream().filter(item -> item.isSelected())
-                    .map(item -> item.getItem()).collect(Collectors.toList());
-            List<Requirement> filtered = RequirementService.getInstance().filter(filter.getField(), selectedValues);
-            if (filtered != null)
-                filteredSet.addAll(filtered);
-        }
+
         if (!emptySelection) {
+            RadioButton selectedRadioBtn = (RadioButton) filterToggleGroup.getSelectedToggle();
+            Set<Requirement> filteredSet;
+            if (selectedRadioBtn.equals(andRadioBtn)) {
+                filteredSet = andFilter();
+            } else {
+                filteredSet = orFilter();
+            }
             requirementObservableList.clear();
             requirementObservableList.addAll(filteredSet.stream().sorted((r1, r2) -> {
                 if (r1.getLevel() == r2.getLevel())
@@ -389,5 +393,34 @@ public class RequirementsController implements Initializable {
         }
         root.setExpanded(contains || isNowExpanded);
         return contains;
+    }
+
+    private Set<Requirement> orFilter() {
+        Set<Requirement> filteredSet = new LinkedHashSet<>();
+        for (Filter<Object> filter : filterObservableList) {
+            List<Object> selectedValues = filter.getItems().stream().filter(item -> item.isSelected())
+                    .map(item -> item.getItem()).collect(Collectors.toList());
+            List<Requirement> filtered = RequirementService.getInstance().filter(filter.getField(), selectedValues);
+            if (filtered != null)
+                filteredSet.addAll(filtered);
+        }
+        return filteredSet;
+    }
+
+    private Set<Requirement> andFilter() {
+        Set<Requirement> filteredSet = null;
+        for (Filter<Object> filter : filterObservableList) {
+            List<Object> selectedValues = filter.getItems().stream().filter(item -> item.isSelected())
+                    .map(item -> item.getItem()).collect(Collectors.toList());
+            if (selectedValues.isEmpty())
+                continue;
+            List<Requirement> filtered = RequirementService.getInstance().filter(filter.getField(), selectedValues);
+            if (filteredSet == null) {
+                filteredSet = new LinkedHashSet<>(filtered);
+            } else {
+                filteredSet.removeIf(requirement -> !filtered.contains(requirement));
+            }
+        }
+        return filteredSet;
     }
 }
