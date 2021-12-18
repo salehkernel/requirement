@@ -16,15 +16,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class TemplatesController implements Initializable {
-    private final File templatesFile;
+    private final InputStreamReader templateInputStreamReader;
     @FXML
     private ListView<Pane> templatesListView;
     private Requirement requirementHolder;
@@ -32,7 +30,8 @@ public class TemplatesController implements Initializable {
 
     public TemplatesController() {
         requirementHolder = RequirementHolder.getInstance().getRequirement();
-        templatesFile = new File("/media/yasin/Local Disk/workspace/work/Java/Roshd/requirement-management/src/main/resources/templates.txt");
+        templateInputStreamReader = new InputStreamReader(getClass().getResourceAsStream("/templates.txt"), StandardCharsets.UTF_8);
+        System.out.println(templateInputStreamReader != null);
     }
 
     @Override
@@ -52,30 +51,36 @@ public class TemplatesController implements Initializable {
     }
 
     private void parse() throws FileNotFoundException {
-        Scanner sc = new Scanner(templatesFile);
-        while (sc.hasNextLine()) {
-            String line = sc.nextLine();
-            String text = "";
-            FlowPane pane = new FlowPane();
-            pane.setHgap(10);
-            pane.setVgap(10);
-            for (int i = 0; i < line.length(); i++) {
-                if (line.charAt(i) != '<' && line.charAt(i) != '>') {
-                    text += line.charAt(i);
-                }
-                if (line.charAt(i) == '<' || i == line.length() - 1) {
-                    addLabel(pane, text);
-                    text = "";
+        BufferedReader br = new BufferedReader(templateInputStreamReader);
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+                String text = "";
+                FlowPane pane = new FlowPane();
+                pane.setHgap(10);
+                pane.setVgap(10);
+                for (int i = 0; i < line.length(); i++) {
+                    if (line.charAt(i) != '<' && line.charAt(i) != '>') {
+                        text += line.charAt(i);
+                    }
+                    if (line.charAt(i) == '<' || i == line.length() - 1) {
+                        addLabel(pane, text);
+                        text = "";
 
+                    }
+                    if (line.charAt(i) == '>') {
+                        addTextField(pane, text);
+                        text = "";
+                    }
                 }
-                if (line.charAt(i) == '>') {
-                    addTextField(pane, text);
-                    text = "";
-                }
+                addSelectButton(pane);
+                paneObservableList.add(pane);
             }
-            addSelectButton(pane);
-            paneObservableList.add(pane);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
     private void addLabel(Pane pane, String text) {
