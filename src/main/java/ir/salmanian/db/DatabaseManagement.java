@@ -95,6 +95,8 @@ public class DatabaseManagement {
         session.beginTransaction();
         if (project.getId() == null) {
             project.setId(UUID.randomUUID());
+        }
+        if (project.getNumber() == null) {
             project.setNumber(getNextProjectNumber(project.getCreator()));
         }
         session.saveOrUpdate(project);
