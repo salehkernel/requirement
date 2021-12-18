@@ -2,5 +2,6 @@
 target
 META-INF
 requirements_db
+out
 derby.log
 requirement-management.iml
