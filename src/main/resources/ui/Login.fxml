@@ -2,16 +2,18 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="loginPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.salmanian.controllers.LoginController">
+<AnchorPane fx:id="loginPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.salmanian.controllers.LoginController">
    <children>
-      <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="embeddedDBRadioBtn" alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Pane HBox.hgrow="NEVER">
                <children>
@@ -30,5 +32,46 @@
             </Pane>
          </children>
       </HBox>
+      <AnchorPane prefHeight="400.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
+         <children>
+            <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <RadioButton fx:id="embeddedDBRadioBtn" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#onEmbeddedDBClick" text="پایگاه داده تعبیه شده" />
+                  <RadioButton fx:id="externalDBRadioBtn" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#onExternalDBClick" text="پایگاه داده خارجی" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+               <children>
+                  <AnchorPane fx:id="dbConnectionPane" visible="false">
+                     <children>
+                        <Label fx:id="dbTypeLabel" layoutX="1452.0" layoutY="4.0" text="نوع سیستم مدیریت پایگاه داده:" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0" />
+                        <ComboBox fx:id="dbTypeCombo" layoutX="1276.0" nodeOrientation="RIGHT_TO_LEFT" prefWidth="170.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="10.0" />
+                        <Label fx:id="hostLabel" layoutX="1373.0" layoutY="38.0" text="آدرس میزبان:" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="45.0" />
+                        <TextField fx:id="hostField" layoutX="1297.0" layoutY="34.0" prefWidth="170.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="45.0" />
+                        <Label fx:id="portLabel" layoutX="1326.0" layoutY="72.0" text="پورت:" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />
+                        <TextField fx:id="portField" layoutX="1297.0" layoutY="68.0" prefWidth="170.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="80.0" />
+                        <Label fx:id="dbNameLabel" layoutX="1373.0" layoutY="106.0" text="نام پایگاه داده:" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="115.0" />
+                        <TextField fx:id="dbNameField" layoutX="1297.0" layoutY="102.0" prefWidth="170.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="115.0" />
+                        <Label fx:id="dbUsernameLabel" layoutX="1414.0" layoutY="140.0" text="نام کاربری پایگاه داده:" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="150.0" />
+                        <TextField fx:id="dbUsernameField" layoutX="1297.0" layoutY="136.0" prefWidth="170.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="150.0" />
+                        <Label fx:id="dbPasswordLabel" layoutX="1406.0" layoutY="174.0" text="رمز عبور پایگاه داده:" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="185.0" />
+                        <PasswordField fx:id="dbPasswordField" layoutX="1297.0" layoutY="170.0" prefWidth="170.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="185.0" />
+                        <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="220.0">
+                           <children>
+                              <Label fx:id="connectionStateLabel" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="1126.0" layoutY="204.0" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="245.0">
+                           <children>
+                              <Button fx:id="dbTestBtn" mnemonicParsing="false" onAction="#onDBTestClick" text="تست" />
+                              <Button fx:id="dbConnectBtn" mnemonicParsing="false" onAction="#onDBConnectClick" text="اتصال" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
