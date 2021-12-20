@@ -133,6 +133,7 @@ public class LoginController implements Initializable {
         ScreenController.getInstance().addScene("registerScene", "Register.fxml");
         ScreenController.getInstance().activateScene("registerScene", ScreenController.getInstance().getMainStage());
         errorLabel.setText("");
+        connectionLabel.setText("");
         usernameField.setText("");
         passwordField.setText("");
         usernameField.requestFocus();
