@@ -4,6 +4,7 @@ import ir.salmanian.models.Project;
 import ir.salmanian.models.Requirement;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.DocumentUtils;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -45,6 +46,7 @@ public class WordExporter implements Exporter {
         } catch (Exception e) {
             e.printStackTrace();
             Dialog exceptionDialog = new Dialog();
+            exceptionDialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             ButtonType ok = new ButtonType("تأیید", ButtonBar.ButtonData.OK_DONE);
             exceptionDialog.setContentText("فایل مورد نظر توسط برنامه دیگری در حال استفاده استفاده است.\n لطفا مجددا تلاش نمایید.");
             exceptionDialog.getDialogPane().getButtonTypes().add(ok);

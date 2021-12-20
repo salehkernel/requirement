@@ -4,6 +4,7 @@ import ir.salmanian.models.Project;
 import ir.salmanian.services.ProjectService;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.UserHolder;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -30,6 +31,7 @@ public class XMLImporter implements Importer {
         } catch (JAXBException e) {
             Dialog dialog = new Dialog();
             ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             dialog.setContentText("فایل انتخاب شده قابل استفاده نمی باشد.\nلطفا فایل دیگری را انتخاب نمایید.");
             dialog.getDialogPane().getButtonTypes().add(ok);
             dialog.showAndWait();

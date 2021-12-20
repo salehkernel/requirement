@@ -2,6 +2,7 @@ package ir.salmanian.controllers;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -149,6 +150,7 @@ public class ScreenController {
         final String dialogText = "پنجره دیگری باز است لطفا آن را ببندید.";
         ButtonType ok = new ButtonType(okBtnText, ButtonBar.ButtonData.OK_DONE);
         Dialog returnDialog = new Dialog();
+        returnDialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         returnDialog.setContentText(dialogText);
         returnDialog.getDialogPane().getButtonTypes().add(ok);
         returnDialog.showAndWait();
@@ -161,6 +163,8 @@ public class ScreenController {
         ButtonType ok = new ButtonType(okBtnText, ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType(cancelBtnText, ButtonBar.ButtonData.CANCEL_CLOSE);
         Dialog exitDialog = new Dialog();
+        exitDialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+
         exitDialog.setContentText(dialogText);
         exitDialog.getDialogPane().getButtonTypes().add(ok);
         exitDialog.getDialogPane().getButtonTypes().add(cancel);

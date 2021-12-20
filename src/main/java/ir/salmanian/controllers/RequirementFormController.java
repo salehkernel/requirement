@@ -21,6 +21,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -314,6 +315,7 @@ public class RequirementFormController implements Initializable {
         if (levelComboBox.getSelectionModel().getSelectedIndex() != 0 && parentRequirementObservableList.isEmpty()) {
             ButtonType btnType = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
             Dialog<String> dialog = new Dialog<>();
+            dialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             dialog.setContentText("لطفا برای این زیر نیازمندی حداقل یک والد انتخاب کنید.");
             dialog.getDialogPane().getButtonTypes().add(btnType);
             dialog.showAndWait();
@@ -372,6 +374,7 @@ public class RequirementFormController implements Initializable {
         ButtonType remove = new ButtonType("حذف نیازمندی والد", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType("انصراف", ButtonBar.ButtonData.CANCEL_CLOSE);
         Dialog dialog = new Dialog<>();
+        dialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         dialog.setContentText("نیازمندی " + illegalParent + "نمی‌تواند والد این نیازمندی باشد.");
         dialog.getDialogPane().getButtonTypes().add(remove);
         dialog.getDialogPane().getButtonTypes().add(cancel);
@@ -450,6 +453,7 @@ public class RequirementFormController implements Initializable {
         final String okBtnText = "تأیید";
         ButtonType ok = new ButtonType(okBtnText, ButtonBar.ButtonData.OK_DONE);
         Dialog childrenAreMetDialog = new Dialog();
+        childrenAreMetDialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         childrenAreMetDialog.setContentText(allChildrenAreMet ? shouldBeMetDialogText : shouldNotBeMetDialogText);
         childrenAreMetDialog.getDialogPane().getButtonTypes().add(ok);
         childrenAreMetDialog.showAndWait();
