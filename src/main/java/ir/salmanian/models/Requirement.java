@@ -1,7 +1,7 @@
 package ir.salmanian.models;
 
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -17,6 +17,7 @@ import java.util.UUID;
 public class Requirement {
 
     @Id
+    @Type(type = "uuid-char")
     @XmlAttribute(name = "requirement-id")
     private UUID id;
     @Column(name = "prefix")

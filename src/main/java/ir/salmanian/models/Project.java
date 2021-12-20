@@ -1,6 +1,7 @@
 package ir.salmanian.models;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class Project {
 
     @Id
+    @Type(type = "uuid-char")
     @XmlAttribute(name = "project-id")
     private UUID id;
     @Column(name = "name")

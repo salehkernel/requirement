@@ -1,5 +1,7 @@
 package ir.salmanian.models;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +11,7 @@ import java.util.UUID;
 public class User {
 
     @Id
+    @Type(type = "uuid-char")
     private UUID id;
     @Column(name = "username")
     private String username;
