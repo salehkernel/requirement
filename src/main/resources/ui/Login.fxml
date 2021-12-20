@@ -13,7 +13,7 @@
 
 <AnchorPane fx:id="loginPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ir.salmanian.controllers.LoginController">
    <children>
-      <HBox fx:id="embeddedDBRadioBtn" alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Pane HBox.hgrow="NEVER">
                <children>
@@ -38,9 +38,15 @@
                <children>
                   <RadioButton fx:id="embeddedDBRadioBtn" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#onEmbeddedDBClick" text="پایگاه داده تعبیه شده" />
                   <RadioButton fx:id="externalDBRadioBtn" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#onExternalDBClick" text="پایگاه داده خارجی" />
+                  <Button fx:id="confirmBtn" mnemonicParsing="false" onAction="#onConfirmClick" text="تأیید" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+            <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+               <children>
+                  <Label fx:id="connectionLabel" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
                <children>
                   <AnchorPane fx:id="dbConnectionPane" visible="false">
                      <children>
@@ -56,15 +62,9 @@
                         <TextField fx:id="dbUsernameField" layoutX="1297.0" layoutY="136.0" prefWidth="170.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="150.0" />
                         <Label fx:id="dbPasswordLabel" layoutX="1406.0" layoutY="174.0" text="رمز عبور پایگاه داده:" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="185.0" />
                         <PasswordField fx:id="dbPasswordField" layoutX="1297.0" layoutY="170.0" prefWidth="170.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="185.0" />
-                        <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="220.0">
-                           <children>
-                              <Label fx:id="connectionStateLabel" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="1126.0" layoutY="204.0" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="245.0">
+                        <HBox alignment="CENTER" layoutX="1126.0" layoutY="204.0" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="220.0">
                            <children>
                               <Button fx:id="dbTestBtn" mnemonicParsing="false" onAction="#onDBTestClick" text="تست" />
-                              <Button fx:id="dbConnectBtn" mnemonicParsing="false" onAction="#onDBConnectClick" text="اتصال" />
                            </children>
                         </HBox>
                      </children>
