@@ -17,17 +17,14 @@ import java.util.stream.Collectors;
 public class DatabaseManagement {
 
     private static DatabaseManagement instance;
-    private final SessionFactory sessionFactory;
-
+    private SessionFactory sessionFactory;
 
     private Session getSession() {
         return sessionFactory.openSession();
     }
 
     private DatabaseManagement() {
-        Configuration config = new Configuration();
-        config.configure();
-        sessionFactory = config.buildSessionFactory();
+
     }
 
     public static DatabaseManagement getInstance() {
@@ -35,6 +32,10 @@ public class DatabaseManagement {
             instance = new DatabaseManagement();
         }
         return instance;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public void saveUser(User user) {
@@ -233,9 +234,9 @@ public class DatabaseManagement {
         String whereClause = "WHERE project =:project AND (";
         for (int i = 0; i < values.size(); i++) {
             if (i == values.size() - 1)
-                whereClause = String.format("%s%s%s%d%s",whereClause,field.getName()," =:value",i,")");
+                whereClause = String.format("%s%s%s%d%s", whereClause, field.getName(), " =:value", i, ")");
             else
-                whereClause = String.format("%s%s%s%d%s",whereClause,field.getName()," =:value",i," OR ");
+                whereClause = String.format("%s%s%s%d%s", whereClause, field.getName(), " =:value", i, " OR ");
         }
         String hql = "FROM Requirement " + whereClause + " ORDER BY level, number";
         Query query = session.createQuery(hql);
