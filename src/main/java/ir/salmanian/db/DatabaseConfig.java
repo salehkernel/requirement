@@ -6,6 +6,9 @@ import org.hibernate.cfg.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * DatabaseConfig class is used for handling embedded and external databases.
+ */
 public class DatabaseConfig {
 
     private Map<DBMS, String> driverClassMap = new HashMap<>();

@@ -14,6 +14,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * DatabaseManagement class is used for reading and writing data in database.
+ * This class uses singleton design pattern.
+ * this class is used by service layer classes
+ * ({@link ir.salmanian.services.UserService}, {@link ir.salmanian.services.ProjectService}
+ * and {@link ir.salmanian.services.RequirementService})
+ */
 public class DatabaseManagement {
 
     private static DatabaseManagement instance;
