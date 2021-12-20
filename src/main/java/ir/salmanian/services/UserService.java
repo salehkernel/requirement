@@ -4,6 +4,10 @@ import ir.salmanian.db.DatabaseManagement;
 import ir.salmanian.models.User;
 import ir.salmanian.utils.Cryptography;
 
+/**
+ * A service layer class for handling users.
+ * this class uses singleton design pattern.
+ */
 public class UserService {
     private static UserService instance;
 

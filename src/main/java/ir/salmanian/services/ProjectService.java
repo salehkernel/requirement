@@ -6,6 +6,10 @@ import ir.salmanian.models.User;
 
 import java.util.List;
 
+/**
+ * A service layer class for handling projects.
+ * This class uses singleton design pattern.
+ */
 public class ProjectService {
     private static ProjectService instance;
 

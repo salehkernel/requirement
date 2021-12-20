@@ -9,6 +9,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A service layer class for handling requirements.
+ * this class uses singleton design pattern.
+ */
+
 public class RequirementService {
     private static RequirementService instance;
 
