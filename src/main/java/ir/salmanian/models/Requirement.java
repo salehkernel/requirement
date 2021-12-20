@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Main entity class used in this application.
+ * Some of field of this class are used in creating xml file.
+ */
 @Entity
 @Table(name = "requirements")
 @XmlRootElement(name = "requirement")

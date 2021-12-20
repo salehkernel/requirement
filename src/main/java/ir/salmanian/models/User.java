@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * One of entity classes used in this application.
+ */
 @Entity
 @Table(name = "users")
 public class User {

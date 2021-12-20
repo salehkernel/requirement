@@ -1,5 +1,8 @@
 package ir.salmanian.models;
 
+/**
+ * An enum for defining and showing values of change of a requirement.
+ */
 public enum Change {
     CONCRETE("سیمانی"),
     FREQUENCY("بسامدی");

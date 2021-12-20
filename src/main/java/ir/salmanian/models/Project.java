@@ -8,6 +8,10 @@ import javax.xml.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * One of entity classes used in this application.
+ * Some fields of this class are used for creating xml file.
+ */
 @Entity
 @Table(name = "projects")
 @XmlRootElement(name = "project")

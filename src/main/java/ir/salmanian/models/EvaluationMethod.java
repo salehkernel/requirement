@@ -1,5 +1,8 @@
 package ir.salmanian.models;
 
+/**
+ * An enum for defining and showing values of evaluation method of a requirement.
+ */
 public enum EvaluationMethod {
     ANALYSIS("آنالیز"),
     SIMULATION("شبیه سازی"),

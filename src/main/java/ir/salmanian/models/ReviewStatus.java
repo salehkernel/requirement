@@ -1,5 +1,8 @@
 package ir.salmanian.models;
 
+/**
+ * An enum for defining and showing values of review status of a requirement.
+ */
 public enum ReviewStatus {
     REJECT("رد"),
     ACCEPT("قبول"),

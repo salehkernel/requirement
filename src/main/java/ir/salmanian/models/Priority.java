@@ -1,5 +1,8 @@
 package ir.salmanian.models;
 
+/**
+ * An enum for defining and showing values of priority of a requirement.
+ */
 public enum Priority {
     KEY("کلیدی"),
     NECESSARY("ضروری"),
