@@ -99,7 +99,6 @@ public class ProjectsController implements Initializable {
 
     @FXML
     public void onLogoutClick(ActionEvent event) throws IOException {
-        ScreenController.getInstance().addScene("loginScene", "Login.fxml");
         ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
         UserHolder.getInstance().setUser(null);
     }

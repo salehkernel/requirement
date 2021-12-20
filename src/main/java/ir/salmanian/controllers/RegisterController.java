@@ -70,7 +70,6 @@ public class RegisterController implements Initializable {
 
     @FXML
     public void onBackClick() throws IOException {
-        ScreenController.getInstance().addScene("loginScene", "Login.fxml");
         ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
     }
 
