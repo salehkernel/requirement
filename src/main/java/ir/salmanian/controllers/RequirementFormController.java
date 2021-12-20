@@ -44,6 +44,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+/**
+ * The controller class for RequirementForm.fxml file which is used for creating and modifying requirements.
+ * The defined elements ids in fxml file are used in this class.
+ * The elements on action method names in fxml file are defined and implemented in this class.
+ */
 public class RequirementFormController implements Initializable {
     @FXML
     private ComboBox<String> levelComboBox;

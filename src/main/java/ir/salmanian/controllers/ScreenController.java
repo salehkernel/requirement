@@ -18,6 +18,9 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * A controller layer class for handling switching between stages.
+ */
 public class ScreenController {
     private final static int MIN_WIDTH = 800;
     private final static int MIN_HEIGHT = 600;

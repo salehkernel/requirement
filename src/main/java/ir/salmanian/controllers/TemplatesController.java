@@ -21,6 +21,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
 
+/**
+ * The controller class for Templates.fxml file which is used for showing defined templates
+ * and selecting one of them.
+ * The defined elements ids in fxml file are used in this class.
+ * The elements on action method names in fxml file are defined and implemented in this class.
+ */
 public class TemplatesController implements Initializable {
     private final InputStreamReader templateInputStreamReader;
     @FXML

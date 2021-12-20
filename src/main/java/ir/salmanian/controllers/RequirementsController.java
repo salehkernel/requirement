@@ -29,7 +29,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
-
+/**
+ * The controller class for Requirements.fxml file which is used to show requirements list.
+ * The defined elements ids in fxml file are used in this class.
+ * The elements on action method names in fxml file are defined and implemented in this class.
+ */
 public class RequirementsController implements Initializable {
 
     private final Clipboard clipboard = Clipboard.getSystemClipboard();

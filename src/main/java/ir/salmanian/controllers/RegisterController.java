@@ -17,6 +17,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The controller class for Register.fxml file which is used to register new user.
+ * The defined elements ids in fxml file are used in this class.
+ * The elements on action method names in fxml file are defined and implemented in this class.
+ */
 public class RegisterController implements Initializable {
     @FXML
     private TextField usernameField;

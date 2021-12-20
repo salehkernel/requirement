@@ -22,6 +22,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+/**
+ * The controller class for SelectParent.fxml file which is used for
+ * selecting some requirements a parents of another requirement.
+ * The defined elements ids in fxml file are used in this class.
+ * The elements on action method names in fxml file are defined and implemented in this class.
+ */
 public class SelectParentController implements Initializable {
     @FXML
     private TextField searchField;

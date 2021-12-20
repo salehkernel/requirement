@@ -27,6 +27,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The controller class for Projects.fxml file which is used to create and show projects.
+ * The defined elements ids in fxml file are used in this class.
+ * The elements on action method names in fxml file are defined and implemented in this class.
+ */
 public class ProjectsController implements Initializable {
     @FXML
     private TextField searchField;
