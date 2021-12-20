@@ -8,7 +8,7 @@
     <property name="connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
     <property name="connection.username">yasin</property>
     <property name="connection.password">M132t</property>
-    <!--<property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>-->
+    <property name="dialect">org.hibernate.dialect.DerbyTenSevenDialect</property>
     <property name="show_sql">false</property>
     <!-- DB schema will be updated if needed -->
      <property name="hibernate.hbm2ddl.auto">update</property>
