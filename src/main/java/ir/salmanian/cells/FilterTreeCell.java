@@ -12,6 +12,11 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.util.Callback;
 
+/**
+ * FilterTreeCell class is used to show each Filter object in the filterTreeView
+ * in {@link ir.salmanian.controllers.RequirementsController} which is the controller of Requirements.fxml file.
+ * see also {@link Filter}
+ */
 public class FilterTreeCell extends TreeCell<Filter<Object>> {
 
     @Override

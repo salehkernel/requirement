@@ -20,6 +20,10 @@ import org.apache.commons.lang.WordUtils;
 
 import java.net.URISyntaxException;
 
+/**
+ * RequirementTreeCell class is used for showing each requirement in the requirementTreeView
+ * in {@link RequirementsController} which is controller of Requirements.fxml file.
+ */
 public class RequirementTreeCell extends TreeCell<Requirement> {
     FlowPane pane;
     ImageView requirementIcon;

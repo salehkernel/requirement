@@ -37,6 +37,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * ProjectCell class is used for showing each Project object in the projectsListview
+ * in {@link ProjectsController} which is the controller of Projects.fxml file.
+ */
 public class ProjectCell extends ListCell<Project> {
     @FXML
     private Label projectLabel;
