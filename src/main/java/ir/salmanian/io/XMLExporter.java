@@ -23,6 +23,10 @@ public class XMLExporter implements Exporter {
         this.project = project;
     }
 
+    /**
+     * This overridden method is used to export project to an xml file.
+     * see also {@link Exporter}
+     */
     @Override
     public void exportToFile() {
         File file = chooseExportedXmlFile();
@@ -46,6 +50,10 @@ public class XMLExporter implements Exporter {
         }
     }
 
+    /**
+     * This method is used to create a .xml file using file chooser.
+     * @return the intended file.
+     */
     private File chooseExportedXmlFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName(String.format("%s.xml", project.getName()));
@@ -55,6 +63,10 @@ public class XMLExporter implements Exporter {
         return fileChooser.showSaveDialog(stage);
     }
 
+    /**
+     * This method is used to get project requirements in their level orders.
+     * @return  a set of requirements.
+     */
     private Set<Requirement> getOrderedByLevelRequirements() {
         Set<Requirement> finalRequirements = new LinkedHashSet<>();
         Set<Requirement> requirementParentSet = new LinkedHashSet<>();

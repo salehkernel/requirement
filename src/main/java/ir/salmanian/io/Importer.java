@@ -7,5 +7,8 @@ import java.io.File;
  * The main implementation of this interface is {@link XMLImporter}.
  */
 public interface Importer {
+    /**
+     * This method is used to import project from a file.
+     */
     void importFromFile(File importFile);
 }

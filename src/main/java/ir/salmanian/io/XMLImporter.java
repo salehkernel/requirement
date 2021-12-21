@@ -20,6 +20,11 @@ import java.io.File;
  * This class is used to import a project to application from an xml file.
  */
 public class XMLImporter implements Importer {
+
+    /**
+     * This overridden method is used to read an xml file and import the containing project to the application
+     * @param importFile the intended file.
+     */
     @Override
     public void importFromFile(File importFile) {
         try {

@@ -30,6 +30,10 @@ public class WordExporter implements Exporter {
         this.project = project;
     }
 
+    /**
+     * This overridden method is used to export project to a word (.docx) document.
+     * see also {@link Exporter}
+     */
     @Override
     public void exportToFile() {
         try {
@@ -58,6 +62,10 @@ public class WordExporter implements Exporter {
         }
     }
 
+    /**
+     * This method is used to create a .docx file using file chooser.
+     * @return the intended file.
+     */
     private File chooseExportedFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName(String.format("%s.docx", project.getName()));
@@ -68,6 +76,10 @@ public class WordExporter implements Exporter {
         return file;
     }
 
+    /**
+     * This method is used to write project requirements to a document level by level.
+     * @param document the intended document in which requirements are written.
+     */
     private void writeRequirementsLevelByLevel(XWPFDocument document) {
         List<Requirement> requirementList = RequirementService.getInstance().getRequirements(project);
         Set<Requirement> requirementParentSet = new LinkedHashSet<>();
@@ -98,6 +110,10 @@ public class WordExporter implements Exporter {
         }
     }
 
+    /**
+     * This method is used to write the title of project in a document
+     * @param document the intended document in which the title of project would be written
+     */
     private void writeDocumentTitle(XWPFDocument document) {
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
@@ -110,6 +126,12 @@ public class WordExporter implements Exporter {
         run.addBreak();
     }
 
+    /**
+     * This method is used to write requirements of an intended level to an intended document
+     * @param document the intended document in which the intended requirements should be written.
+     * @param requirements set of requirements which should be written in document.
+     * @param level the level of requirements
+     */
     private void writeToDoc(XWPFDocument document, Set<Requirement> requirements, int level) {
         if (requirements.size() != 0) {
             XWPFParagraph paragraph = document.createParagraph();
