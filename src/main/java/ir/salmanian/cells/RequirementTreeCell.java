@@ -80,13 +80,23 @@ public class RequirementTreeCell extends TreeCell<Requirement> {
             styleProperty().bind(Bindings.createStringBinding(() -> ""));
         }
     }
-
+    /**
+     * This method gets an string which is the style of the node and represents the border color
+     * based on the input param requirement.
+     * @param requirement the intended requirement
+     * @return an style which determines border color
+     */
     private String getBorderColorStyle(Requirement requirement) {
         String styleName = "-fx-border-color: ";
         String borderColor = getRequirementLevelColor(requirement);
         return String.format("%s%s;", styleName, borderColor);
     }
 
+    /**
+     * This method returns an string which is the color based on input param requirement level
+     * @param requirement the intended requirement
+     * @return a color based on requirement level
+     */
     private String getRequirementLevelColor(Requirement requirement) {
         String borderColor = "";
         switch (requirement.getLevel() % 10) {
@@ -125,12 +135,23 @@ public class RequirementTreeCell extends TreeCell<Requirement> {
         return borderColor;
     }
 
+    /**
+     * This method is used to get an string which is the style for text color based on input param
+     * requirement is met or not.
+     * @param requirement the intended requirement
+     * @return an style which determines text fill is green (for met requirement) or black (otherwise)
+     */
     private String getTextFillStyle(Requirement requirement) {
         String styleName = "-fx-text-fill: ";
         String fillColor = requirement.getEvaluationStatus() == EvaluationStatus.MET ? "green" : "black";
         return String.format("%s%s;", styleName, fillColor);
     }
 
+    /**
+     * This method is used to determine the indention of cell border based on input param requirement level.
+     * @param requirement the intended requirement
+     * @return an string which is the style for indention of border (border insets) based on requirement level.
+     */
     private String getBorderInsetsStyle(Requirement requirement) {
         String styleName = "-fx-border-insets: ";
         String value = String.format("1px 1px 1px %dpx", (requirement.getLevel() - 1) * 25 + 1);
