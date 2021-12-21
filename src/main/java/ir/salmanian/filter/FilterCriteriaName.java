@@ -1,5 +1,8 @@
 package ir.salmanian.filter;
 
+/**
+ * FilterCriteriaName class is used to store criteria names for filtering requirements in static fields.
+ */
 public class FilterCriteriaName {
     public static final String PRIORITY = "اولویت";
     public static final String REQUIREMENT_TYPE = "نوع نیازمندی";

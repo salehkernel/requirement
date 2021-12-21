@@ -3,6 +3,12 @@ package ir.salmanian.filter;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
+/**
+ * Generic FilterItem class is used to be show in the listview of filtering items for each criteria.
+ * the listview cell factory is set to checkbox list cell.
+ * so each item of this list view should have a {@link BooleanProperty} filed.
+ * see also {@link Filter}
+ */
 public class FilterItem<T> {
     private T item;
     private BooleanProperty selected;

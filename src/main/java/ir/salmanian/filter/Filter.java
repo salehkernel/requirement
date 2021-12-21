@@ -4,6 +4,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Generic Filter class is used to show filter criteria name and filter items of that criteria in
+ * filterTreeView of {@link ir.salmanian.controllers.RequirementsController} class. This class also
+ * contains a Field property which indicates this filter is belongs to which filed of
+ * {@link ir.salmanian.models.Requirement} class
+ */
 public class Filter<T> {
     private String criteriaName;
     private Field field;
