@@ -31,6 +31,16 @@ public class DatabaseConfig {
         return instance;
     }
 
+    /**
+     * This method is used to change the database to an external one
+     * @param dbms type of dbms
+     * @param hostAddress address of host
+     * @param port port number
+     * @param dbName the name of database
+     * @param username the username
+     * @param password the password
+     * @return built sessionFactory if connection to database is success, null otherwise
+     */
     public SessionFactory useExternalDB(DBMS dbms, String hostAddress, int port, String dbName,
                                         String username, String password) {
         if (testConnection(dbms, hostAddress, port, dbName, username, password)) {
@@ -42,11 +52,25 @@ public class DatabaseConfig {
 
     }
 
+    /**
+     * This method is used to change database to embedded one with properties in hibernate config file.
+     * @return built sessionFactory.
+     */
     public SessionFactory useEmbeddedDB() {
         config = new Configuration().configure();
         return config.buildSessionFactory();
     }
 
+    /**
+     * This method is used to test connection to external database.
+     * @param dbms type of dbms
+     * @param hostAddress address of host
+     * @param port port number
+     * @param dbName the name of database
+     * @param username the username
+     * @param password the password
+     * @return true if connection is successful and built sessionFactory is not null, false otherwise
+     */
     public boolean testConnection(DBMS dbms, String hostAddress, int port, String dbName,
                                   String username, String password) {
         setProperties(dbms, hostAddress, port, dbName, username, password);
@@ -59,6 +83,15 @@ public class DatabaseConfig {
         }
     }
 
+    /**
+     * This method is used set properties for config
+     * @param dbms type of dbms
+     * @param hostAddress address of host
+     * @param port port number
+     * @param dbName the name of database
+     * @param username the username
+     * @param password the password
+     */
     private void setProperties(DBMS dbms, String hostAddress, int port, String dbName, String username, String password) {
         config.setProperty("hibernate.connection.driver_class", driverClassMap.get(dbms));
         config.setProperty("hibernate.dialect", dialectMap.get(dbms));
