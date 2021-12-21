@@ -7,6 +7,10 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 import java.io.IOException;
 
+/**
+ * DocumentUtils is a utility class for handling some actions on a word document or its components
+ * like paragraphs, tables and etc
+ */
 public class DocumentUtils {
     public static void mergeHorizontally(XWPFTable table, int row, int fromCell, int toCell) {
         for (int cellIndex = fromCell; cellIndex <= toCell; cellIndex++) {

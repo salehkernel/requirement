@@ -4,6 +4,9 @@ import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Cryptography class is an utility class which is used to encrypt and hashing data.
+ */
 public class Cryptography {
 
     public static String hash256(String input){
