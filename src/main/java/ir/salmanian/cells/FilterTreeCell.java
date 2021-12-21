@@ -23,8 +23,8 @@ public class FilterTreeCell extends TreeCell<Filter<Object>> {
     protected void updateItem(Filter<Object> item, boolean empty) {
         super.updateItem(item, empty);
         if (item != null && !empty) {
-            if (item.getName() != null) {
-                Label filterNameLabel = new Label(item.getName());
+            if (item.getCriteriaName() != null) {
+                Label filterNameLabel = new Label(item.getCriteriaName());
                 setGraphic(filterNameLabel);
             } else {
                 ListView<FilterItem<Object>> filterItemListView = new ListView<>();

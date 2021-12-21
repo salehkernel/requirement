@@ -1,6 +1,6 @@
 package ir.salmanian.filter;
 
-public class FilterName {
+public class FilterCriteriaName {
     public static final String PRIORITY = "اولویت";
     public static final String REQUIREMENT_TYPE = "نوع نیازمندی";
     public static final String CHANGE = "تغییرات";

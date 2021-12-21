@@ -4,7 +4,7 @@ import ir.salmanian.cells.FilterTreeCell;
 import ir.salmanian.cells.RequirementTreeCell;
 import ir.salmanian.filter.Filter;
 import ir.salmanian.filter.FilterItem;
-import ir.salmanian.filter.FilterName;
+import ir.salmanian.filter.FilterCriteriaName;
 import ir.salmanian.models.*;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.ProjectHolder;
@@ -251,31 +251,31 @@ public class RequirementsController implements Initializable {
     private void loadFilters() {
         filterObservableList = FXCollections.observableArrayList();
         try {
-            Filter<Priority> priorityFilter = new Filter<>(FilterName.PRIORITY,
+            Filter<Priority> priorityFilter = new Filter<>(FilterCriteriaName.PRIORITY,
                     Requirement.class.getDeclaredField("priority"),
                     Arrays.asList(Priority.values()).stream().map(value -> new FilterItem<>(value))
                             .collect(Collectors.toList()));
-            Filter<RequirementType> typeFilter = new Filter<>(FilterName.REQUIREMENT_TYPE,
+            Filter<RequirementType> typeFilter = new Filter<>(FilterCriteriaName.REQUIREMENT_TYPE,
                     Requirement.class.getDeclaredField("requirementType"),
                     Arrays.asList(RequirementType.values()).stream().map(value -> new FilterItem<>(value))
                             .collect(Collectors.toList()));
-            Filter<Change> changeFilter = new Filter<>(FilterName.CHANGE,
+            Filter<Change> changeFilter = new Filter<>(FilterCriteriaName.CHANGE,
                     Requirement.class.getDeclaredField("changes"),
                     Arrays.asList(Change.values()).stream().map(value -> new FilterItem<>(value))
                             .collect(Collectors.toList()));
-            Filter<ReviewStatus> reviewStatusFilter = new Filter<>(FilterName.REVIEW_STATUS,
+            Filter<ReviewStatus> reviewStatusFilter = new Filter<>(FilterCriteriaName.REVIEW_STATUS,
                     Requirement.class.getDeclaredField("reviewStatus"),
                     Arrays.asList(ReviewStatus.values()).stream().map(value -> new FilterItem<>(value))
                             .collect(Collectors.toList()));
-            Filter<EvaluationStatus> evaluationStatusFilter = new Filter<>(FilterName.EVALUATION_STATUS,
+            Filter<EvaluationStatus> evaluationStatusFilter = new Filter<>(FilterCriteriaName.EVALUATION_STATUS,
                     Requirement.class.getDeclaredField("evaluationStatus"),
                     Arrays.asList(EvaluationStatus.values()).stream().map(value -> new FilterItem<>(value))
                             .collect(Collectors.toList()));
-            Filter<EvaluationMethod> evaluationMethodFilter = new Filter<>(FilterName.EVALUATION_METHOD,
+            Filter<EvaluationMethod> evaluationMethodFilter = new Filter<>(FilterCriteriaName.EVALUATION_METHOD,
                     Requirement.class.getDeclaredField("evaluationMethod"),
                     Arrays.asList(EvaluationMethod.values()).stream().map(value -> new FilterItem<>(value))
                             .collect(Collectors.toList()));
-            Filter<QualityFactor> qualityFactorFilter = new Filter<>(FilterName.QUALITY_FACTOR,
+            Filter<QualityFactor> qualityFactorFilter = new Filter<>(FilterCriteriaName.QUALITY_FACTOR,
                     Requirement.class.getDeclaredField("qualityFactor"),
                     Arrays.asList(QualityFactor.values()).stream().map(value -> new FilterItem<>(value))
                             .collect(Collectors.toList()));

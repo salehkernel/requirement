@@ -3,25 +3,24 @@ package ir.salmanian.filter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Filter<T> {
-    private String name;
+    private String criteriaName;
     private Field field;
     private List<FilterItem<T>> items = new ArrayList<>();
 
-    public Filter(String name, Field field, List<FilterItem<T>> items) {
-        this.name = name;
+    public Filter(String criteriaName, Field field, List<FilterItem<T>> items) {
+        this.criteriaName = criteriaName;
         this.items = items;
         this.field = field;
     }
 
-    public String getName() {
-        return name;
+    public String getCriteriaName() {
+        return criteriaName;
     }
 
-    public Filter<T> setName(String name) {
-        this.name = name;
+    public Filter<T> setCriteriaName(String criteriaName) {
+        this.criteriaName = criteriaName;
         return this;
     }
 
