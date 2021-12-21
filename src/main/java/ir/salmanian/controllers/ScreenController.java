@@ -62,6 +62,11 @@ public class ScreenController {
 
     }
 
+    /**
+     * This method is used to put a scene to sceneMap with intended key
+     * @param sceneKey the key for intended scene,
+     * @param fxmlFile the fxml file name of intended scene
+     */
     public void addScene(String sceneKey, String fxmlFile) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(String.format("/ui/%s", fxmlFile)));
         Pane pane = loader.load();
@@ -77,6 +82,11 @@ public class ScreenController {
         sceneMap.put(sceneKey, scene);
     }
 
+    /**
+     * This method is used to open the scene mapped to intended sceneKey in the intended stage.
+     * @param sceneKey the intended sceneKey
+     * @param stage the intended stage which should show the scene
+     */
     public void activateScene(String sceneKey, Stage stage) {
         Scene scene = sceneMap.get(sceneKey);
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -112,6 +122,12 @@ public class ScreenController {
         }
     }
 
+    /**
+     * This method is used to create new stage and put it to stageMap with intended stage key if it does no exist
+     * or request focus for stage mapped to the intended stageKey if it is exist
+     * @param stageKey the intended stageKey
+     * @return the new or existing stage
+     */
     public Stage openNewStage(String stageKey) {
         if (stageMap.get(stageKey) != null) {
             stageMap.get(stageKey).requestFocus();
@@ -139,15 +155,26 @@ public class ScreenController {
         return stageMap.get(stageKey);
     }
 
+    /**
+     * This method is used to close the stage mapped to intended stageKey and remove it from stageMap
+     * @param stageKey the intended stageKey
+     */
     public void closeStage(String stageKey) {
         stageMap.get(stageKey).close();
         stageMap.remove(stageKey);
     }
 
+    /**
+     * This method is used to get the number of opened stages.
+     * @return the number of opened stages.
+     */
     public int getOpenStagesCount() {
         return stageMap.size();
     }
 
+    /**
+     * This method is used to open a dialog and message that another stage is open which should be closed.
+     */
     public void showReturnDialog() {
         final String okBtnText = "تأیید";
         final String dialogText = "پنجره دیگری باز است لطفا آن را ببندید.";
@@ -159,6 +186,9 @@ public class ScreenController {
         returnDialog.showAndWait();
     }
 
+    /**
+     * This method is used to show a dialog which message is confirmation of exiting and closing the application.
+     */
     private void showExitDialog() {
         final String okBtnText = "خروج";
         final String cancelBtnText = "انصراف";
@@ -178,6 +208,11 @@ public class ScreenController {
         }
     }
 
+    /**
+     * This method is used to check if the intended scene has cancel button
+     * @param scene the intended scene
+     * @return true if th input scene has cancel button, false otherwise.
+     */
     private boolean sceneHasCancelBtn(Scene scene) {
         return scene.getRoot().getChildrenUnmodifiable().filtered(node -> node instanceof Button)
                 .filtered(node -> ((Button) node).isCancelButton()).size() > 0;

@@ -366,6 +366,11 @@ public class RequirementFormController implements Initializable {
         }
     }
 
+    /**
+     * This method is used to close the requirement form stage with intended stageKey and focus RequirementsStage
+     * and refresh the requirementsTreeView of RequirementsStage.
+     * @param stageKey the key of intended stage.
+     */
     private void CloseStageAndFocusMainStage(String stageKey) {
         Stage stage = ScreenController.getInstance().getMainStage();
         FXMLLoader loader = (FXMLLoader) stage.getScene().getUserData();
@@ -375,6 +380,11 @@ public class RequirementFormController implements Initializable {
         stage.requestFocus();
     }
 
+    /**
+     * This method is used to open a dialog which message is being intended requirement in the list parents
+     * is illegal.
+     * @param illegalParent intended illegal parent.
+     */
     private void showIllegalParentDialog(Requirement illegalParent) {
         ButtonType remove = new ButtonType("حذف نیازمندی والد", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType("انصراف", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -389,6 +399,11 @@ public class RequirementFormController implements Initializable {
         }
     }
 
+    /**
+     * This method is used to find first illegal parent in the list of parents of current requirement
+     * by checking the parents level and current requirement selected level
+     * @return first illegal parent if exists, null otherwise.
+     */
     private Requirement findIllegalParent() {
         Requirement illegalParent = null;
         for (Requirement parent :
@@ -401,6 +416,10 @@ public class RequirementFormController implements Initializable {
         return illegalParent;
     }
 
+    /**
+     * This method is used to store current form values to intended requirement object
+     * @param requirement the intended requirement
+     */
     private void saveTemporalRequirement(Requirement requirement) {
 
         requirement.setLevel(levelComboBox.getValue().length())
@@ -418,6 +437,10 @@ public class RequirementFormController implements Initializable {
                 .setProject(ProjectHolder.getInstance().getProject());
     }
 
+    /**
+     * This method is used to find the max level of parents of requirementHolder
+     * @return max level of parents of requirementHolder if its parents list is not empty, 0 otherwise.
+     */
     private int findParentsMaxLevel() {
         int parentsMaxLevel = 0;
         if (!requirementHolder.getParents().isEmpty()) {
@@ -429,6 +452,12 @@ public class RequirementFormController implements Initializable {
         return parentsMaxLevel;
     }
 
+    /**
+     * This method is used to check if the all the children of intended requirement are met or not
+     * @param requirement the intended requirement
+     * @return true if all children of intended requirement are met, false if the intended requirement has no
+     * child or at least one of its children is not met
+     */
     private boolean childrenAreMet(Requirement requirement) {
         List<Requirement> children = RequirementService.getInstance().getChildrenRequirements(requirement);
         if (children == null || children.isEmpty())
@@ -443,6 +472,11 @@ public class RequirementFormController implements Initializable {
         return childrenAreMet;
     }
 
+    /**
+     * This method is used to check if evaluationStatus of intended requirement can be set to MET or not
+     * @param requirement the intended requirement
+     * @return true if the intended has no child or all its children are met, false otherwise.
+     */
     private boolean evaluationStatusCanBeMet(Requirement requirement) {
         List<Requirement> children = RequirementService.getInstance().getChildrenRequirements(requirement);
         if (children == null || children.isEmpty())
@@ -450,6 +484,11 @@ public class RequirementFormController implements Initializable {
         return childrenAreMet(requirement);
     }
 
+    /**
+     * This method is used to open a dialog to show message that the evaluationStatus is inappropriate
+     * based on input param allChildrenAreMet
+     * @param allChildrenAreMet
+     */
     private void showInappropriateEvaluationStatusDialog(boolean allChildrenAreMet) {
         final String shouldBeMetDialogText = "تمام فرزندان این نیازمندی ملاقات شده‌اند.\n" +
                 "وضعیت ارزیابی این نیازمندی باید «ملاقات شده» باشد.";
@@ -464,6 +503,10 @@ public class RequirementFormController implements Initializable {
         childrenAreMetDialog.showAndWait();
     }
 
+    /**
+     * This method is used to update evaluationStatus of parents of intended requirement
+     * @param requirement the intended requirement
+     */
     private void updateParentsEvaluationStatus(Requirement requirement) {
         Set<Requirement> currentParents = new LinkedHashSet<>(requirement.getParents());
         Set<Requirement> parentsOfParents = new LinkedHashSet<>();

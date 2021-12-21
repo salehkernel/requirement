@@ -45,6 +45,10 @@ public class ProjectsController implements Initializable {
         refreshProjectsList();
     }
 
+    /**
+     * This method is used to refresh the list of projects by getting the list of projects
+     * of the logged in user.
+     */
     private void refreshProjectsList() {
         projectObservableList = FXCollections.observableArrayList();
         User user = UserHolder.getInstance().getUser();
@@ -52,6 +56,10 @@ public class ProjectsController implements Initializable {
         projectObservableList.addAll(projects);
     }
 
+    /**
+     * This method is used to open and show the list of requirements of intended project.
+     * @param project the intended project
+     */
     public static void openProject(Project project) {
         try {
             ProjectHolder.getInstance().setProject(project);

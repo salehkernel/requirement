@@ -218,6 +218,12 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * This method is used to authenticate users and show proper massages to user
+     * if the authentication is not successful.
+     *
+     * @return true if authentication successes. false otherwise.
+     */
     private boolean login() {
         switch (UserService.getInstance().login(usernameField.getText(), passwordField.getText())) {
             case 0:
@@ -232,6 +238,11 @@ public class LoginController implements Initializable {
         return false;
     }
 
+    /**
+     * This method checks login form field and show proper message if the fields are Empty.
+     *
+     * @return true if the there is empty field, false otherwise.
+     */
     private boolean checkEmptyFields() {
         String message = "";
         if (usernameField.getText().isEmpty()) {
@@ -249,6 +260,11 @@ public class LoginController implements Initializable {
     }
 
 
+    /**
+     * This method is used to check the input fields of database connection pane and show proper message
+     * if empty field exist.
+     * @return false if empty input field exist, true otherwise.
+     */
     private boolean connectionPaneFieldsAreOK() {
         connectionLabel.setTextFill(Color.RED);
         if (hostField.getText().trim().isEmpty()) {

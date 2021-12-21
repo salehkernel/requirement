@@ -237,6 +237,10 @@ public class RequirementsController implements Initializable {
         prepareRequirementsTreeView();
     }
 
+    /**
+     * This method is used to load first level requirements of the selected project (stored in projectHolder)
+     * and add them to requirementObservableList.
+     */
     private void loadRequirements() {
         requirementObservableList = FXCollections.observableArrayList();
         List<Requirement> requirements = RequirementService.getInstance()
@@ -248,6 +252,9 @@ public class RequirementsController implements Initializable {
         }
     }
 
+    /**
+     * This method is used to initialize Filters and add them to filterObservableList
+     */
     private void loadFilters() {
         filterObservableList = FXCollections.observableArrayList();
         try {
@@ -291,6 +298,9 @@ public class RequirementsController implements Initializable {
         }
     }
 
+    /**
+     * This method is used to prepare requirementsTreeView based on the requirements in requirementObservableList
+     */
     private void prepareRequirementsTreeView() {
         TreeItem<Requirement> rootItem = new TreeItem<>();
         for (Requirement req : requirementObservableList) {
@@ -303,6 +313,9 @@ public class RequirementsController implements Initializable {
         requirementTreeView.setShowRoot(false);
     }
 
+    /**
+     * This method is used to prepare filterTreeView based on filters in filterObservableList.
+     */
     private void prepareFilterTreeView() {
         TreeItem<Filter<Object>> rootItem = new TreeItem<>();
         for (Filter filter : filterObservableList) {
@@ -316,10 +329,17 @@ public class RequirementsController implements Initializable {
         filterTreeView.setShowRoot(false);
     }
 
+    /**
+     * This method is used to refresh the requirementsTreeView.
+     */
     public void refreshTreeView() {
         refreshTreeItem(requirementTreeView.getRoot());
     }
 
+    /**
+     * This method is used to open the requirement form for intended requirement to modify or delete that.
+     * @param requirement the intended requirement
+     */
     public static void openRequirementForm(Requirement requirement) {
         RequirementHolder.getInstance().setRequirement(requirement);
         Stage stage = ScreenController.getInstance().openNewStage(
@@ -334,6 +354,10 @@ public class RequirementsController implements Initializable {
         }
     }
 
+    /**
+     * This recursive method is used to refresh the intended treeItem and its children.
+     * @param root the intended treeItem.
+     */
     private void refreshTreeItem(TreeItem<Requirement> root) {
         List<TreeItem<Requirement>> removeList = new ArrayList<>();
         List<Requirement> children;
@@ -368,6 +392,10 @@ public class RequirementsController implements Initializable {
         }
     }
 
+    /**
+     * This method is used to search in requirements of selected project (ProjectHolder)
+     * and show them. if the search filed is empty this method shows the first level requirements.
+     */
     private void search() {
         requirementObservableList.clear();
         if (searchRequirementField.getText().trim().isEmpty()) {
@@ -386,19 +414,34 @@ public class RequirementsController implements Initializable {
         }
     }
 
+    /**
+     * This recursive method is used to check if intended requirement treeItem
+     * has a child which its evaluation status is MET or not.
+     * @param root the intended treeItem
+     * @return true if has a child which its evaluationStatus is Met and select them,
+     * false otherwise.
+     */
     private boolean containsMetRequirement(TreeItem<Requirement> root) {
         boolean isNowExpanded = root.isExpanded();
         root.setExpanded(true);
         boolean contains = false;
         for (TreeItem<Requirement> child : root.getChildren()) {
-            if (containsMetRequirement(child) || child.getValue().getEvaluationStatus() == EvaluationStatus.MET) {
+            if (containsMetRequirement(child)) {
                 contains = true;
+            }
+            if (child.getValue().getEvaluationStatus() == EvaluationStatus.MET) {
+                contains = true;
+                requirementTreeView.getSelectionModel().select(child);
             }
         }
         root.setExpanded(contains || isNowExpanded);
         return contains;
     }
 
+    /**
+     *  This method is used to show every requirements which one of the filter criteria matches to it.
+     * @return a set of filtered requirements
+     */
     private Set<Requirement> orFilter() {
         Set<Requirement> filteredSet = new LinkedHashSet<>();
         for (Filter<Object> filter : filterObservableList) {
@@ -411,6 +454,10 @@ public class RequirementsController implements Initializable {
         return filteredSet;
     }
 
+    /**
+     *  This method is used to show every requirements which all of the filter criteria matches to it.
+     * @return a set of filtered requirements
+     */
     private Set<Requirement> andFilter() {
         Set<Requirement> filteredSet = null;
         for (Filter<Object> filter : filterObservableList) {

@@ -78,6 +78,10 @@ public class RegisterController implements Initializable {
         ScreenController.getInstance().activateScene("loginScene", ScreenController.getInstance().getMainStage());
     }
 
+    /**
+     * This method is used to chek if the entered password and repeat password are equal,
+     * @return true if the password and repeat password are equals, false otherwise.
+     */
     private boolean checkRepeatPassword() {
         errorLabel.setText("");
         if (!repeatPasswordField.getText().trim().equals(passwordField.getText().trim())) {
@@ -87,6 +91,11 @@ public class RegisterController implements Initializable {
         return true;
     }
 
+    /**
+     * This method checks register form fields and show proper message if the fields are Empty.
+     *
+     * @return true if the there is empty field, false otherwise.
+     */
     private boolean checkEmptyFields() {
         String message = "";
         if (usernameField.getText().isEmpty()) {
@@ -111,6 +120,10 @@ public class RegisterController implements Initializable {
         return false;
     }
 
+    /**
+     * This method is used to check if the entered username exists in database or not.
+     * @return true if the username exists in database, false otherwise.
+     */
     private boolean usernameExists() {
         if (UserService.getInstance().usernameExists(usernameField.getText())) {
             errorLabel.setText("نام کاربری وجود دارد.");
@@ -119,6 +132,10 @@ public class RegisterController implements Initializable {
         return false;
     }
 
+    /**
+     * This method is used to check if the entered email address exists in database or not.
+     * @return true if the email address exists in database, false otherwise.
+     */
     private boolean emailExists() {
         if (UserService.getInstance().emailExists(emailField.getText())) {
             errorLabel.setText("ایمیل وجود دارد.");

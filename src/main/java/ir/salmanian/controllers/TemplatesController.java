@@ -55,6 +55,10 @@ public class TemplatesController implements Initializable {
         });
     }
 
+    /**
+     * This method is used to parse templates file and add a pane of labels and inputs
+     * to the paneObservableList for each line
+     */
     private void parse() throws FileNotFoundException {
         BufferedReader br = new BufferedReader(templateInputStreamReader);
         String line;
@@ -87,6 +91,11 @@ public class TemplatesController implements Initializable {
 
     }
 
+    /**
+     * This method is used to create a label with intended text and add it to intended pane
+     * @param pane the intended pane which the label should be added to its children
+     * @param text the intended text to be set to created label.
+     */
     private void addLabel(Pane pane, String text) {
         if (text.trim().isEmpty())
             return;
@@ -94,6 +103,11 @@ public class TemplatesController implements Initializable {
         pane.getChildren().add(label);
     }
 
+    /**
+     * This method is used to create a text field with intended prompt text and add it to intended pane
+     * @param pane the intended pane which the text field should be added to its children
+     * @param prompt the intended prompt text to be set to created text field.
+     */
     private void addTextField(Pane pane, String prompt) {
         if (prompt.trim().isEmpty())
             return;
@@ -102,6 +116,12 @@ public class TemplatesController implements Initializable {
         pane.getChildren().add(textField);
     }
 
+    /**
+     * This method is used to create a button and add it to the children of intended pane.
+     * The onAction event handler of this button gets the text of intended pane children
+     * (except the created button) and use them as title of selected requirements (requirementHolder)
+     * @param pane the intended pane which the created button should be added to its children
+     */
     private void addSelectButton(Pane pane) {
         Button select = new Button("انتخاب");
         select.setOnAction(new EventHandler<ActionEvent>() {
