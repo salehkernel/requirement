@@ -15,6 +15,10 @@ import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
+/**
+ * XMLImporter class is an implementation of {@link Importer} interface.
+ * This class is used to import a project to application from an xml file.
+ */
 public class XMLImporter implements Importer {
     @Override
     public void importFromFile(File importFile) {

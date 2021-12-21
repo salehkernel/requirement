@@ -19,6 +19,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * WordExporter class is an implementation of {@link Exporter} interface.
+ * This class is used to export project to a word document (.docx) file.
+ */
 public class WordExporter implements Exporter {
     private Project project;
 

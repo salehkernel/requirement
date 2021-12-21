@@ -12,6 +12,10 @@ import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.util.*;
 
+/**
+ * XMLExporter class is an implementation of {@link Exporter} interface.
+ * This class is used to export project to an xml file.
+ */
 public class XMLExporter implements Exporter {
     Project project;
 
