@@ -9,6 +9,11 @@ import java.nio.charset.StandardCharsets;
  */
 public class Cryptography {
 
+    /**
+     * This method is used to hash the input string.
+     * @param input
+     * @return the hashed string of input
+     */
     public static String hash256(String input){
         return Hashing.sha256().hashString(input,StandardCharsets.UTF_8).toString();
     }
