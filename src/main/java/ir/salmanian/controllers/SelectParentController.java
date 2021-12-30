@@ -47,12 +47,16 @@ public class SelectParentController implements Initializable {
         requirementHolder = RequirementHolder.getInstance().getRequirement();
         requirementObservableList = FXCollections.observableArrayList();
         List<Requirement> requirements = RequirementService.getInstance().getRequirements(ProjectHolder.getInstance().getProject());
+        List<Requirement> children = /*requirementHolder.getChildren()*/RequirementService.getInstance().getChildrenRequirements(requirementHolder);
         requirements.remove(requirementHolder);
-        for (Requirement req : requirements) {
+        if (children != null)
+            requirements.removeAll(children);
+        /*for (Requirement req : requirements) {
             if (req.getLevel() == requirementHolder.getLevel() - 1) {
                 requirementObservableList.add(req);
             }
-        }
+        }*/
+        requirementObservableList.addAll(requirements);
     }
 
     @Override
@@ -135,13 +139,17 @@ public class SelectParentController implements Initializable {
     public void onSearchRequirementClick(ActionEvent event) {
         List<Requirement> requirements = RequirementService.getInstance()
                 .searchRequirement(searchField.getText().trim(), ProjectHolder.getInstance().getProject());
+        List<Requirement> children = RequirementService.getInstance().getChildrenRequirements(requirementHolder);
         requirements.remove(requirementHolder);
+        if (children != null)
+            requirements.removeAll(children);
         requirementObservableList.clear();
-        for (Requirement req : requirements) {
+        /*for (Requirement req : requirements) {
             if (req.getLevel() == requirementHolder.getLevel() - 1) {
                 requirementObservableList.add(req);
             }
-        }
+        }*/
+        requirementObservableList.addAll(requirements);
         requirementListView.setItems(requirementObservableList);
     }
 }
