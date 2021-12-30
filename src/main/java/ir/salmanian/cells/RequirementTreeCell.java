@@ -12,6 +12,7 @@ import javafx.event.EventDispatcher;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -54,8 +55,8 @@ public class RequirementTreeCell extends TreeCell<Requirement> {
             requirementTitleLabel.styleProperty().bind(Bindings.createStringBinding(
                     () -> concatAllStyles(getTextFillStyle(item))));
             styleProperty().bind(Bindings.createStringBinding(
-                    () -> concatAllStyles(getBorderColorStyle(item), "-fx-border-radius: 5px;",
-                            getBorderInsetsStyle(item), "-fx-indent: 0px;", "-fx-border-width: 0px 0px 1px 1px;")
+                    () -> concatAllStyles(getBorderColorStyle(getTreeItem()), "-fx-border-radius: 5px;",
+                            getBorderInsetsStyle(getTreeItem()), "-fx-indent: 0px;", "-fx-border-width: 0px 0px 1px 1px;")
             ));
             updateTreeItem(getTreeItem());
             EventDispatcher eventDispatcher = getEventDispatcher();
@@ -80,26 +81,36 @@ public class RequirementTreeCell extends TreeCell<Requirement> {
             styleProperty().bind(Bindings.createStringBinding(() -> ""));
         }
     }
+
     /**
      * This method gets an string which is the style of the node and represents the border color
      * based on the input param requirement.
-     * @param requirement the intended requirement
+     *
+//     * @param requirement the intended requirement
      * @return an style which determines border color
      */
-    private String getBorderColorStyle(Requirement requirement) {
+    private String getBorderColorStyle(TreeItem<Requirement> item) {
         String styleName = "-fx-border-color: ";
-        String borderColor = getRequirementLevelColor(requirement);
+        String borderColor = getRequirementLevelColor(item);
         return String.format("%s%s;", styleName, borderColor);
     }
 
     /**
      * This method returns an string which is the color based on input param requirement level
-     * @param requirement the intended requirement
+     *
+//     * @param requirement the intended requirement
      * @return a color based on requirement level
      */
-    private String getRequirementLevelColor(Requirement requirement) {
+    private String getRequirementLevelColor(TreeItem<Requirement> item) {
+        /*Requirement currentParent = item.getParent().getValue();
+        Requirement requirement = item.getValue();*/
+        int level = 1;
+        while (item.getParent().getValue() != null) {
+            level++;
+            item = item.getParent();
+        }
         String borderColor = "";
-        switch (requirement.getLevel() % 10) {
+        switch (level % 10) {
             case 1:
                 borderColor = "#6DA472";
                 break;
@@ -138,6 +149,7 @@ public class RequirementTreeCell extends TreeCell<Requirement> {
     /**
      * This method is used to get an string which is the style for text color based on input param
      * requirement is met or not.
+     *
      * @param requirement the intended requirement
      * @return an style which determines text fill is green (for met requirement) or black (otherwise)
      */
@@ -149,12 +161,21 @@ public class RequirementTreeCell extends TreeCell<Requirement> {
 
     /**
      * This method is used to determine the indention of cell border based on input param requirement level.
-     * @param requirement the intended requirement
+     *
+//     * @param requirement the intended requirement
      * @return an string which is the style for indention of border (border insets) based on requirement level.
      */
-    private String getBorderInsetsStyle(Requirement requirement) {
+    private String getBorderInsetsStyle(TreeItem<Requirement> item) {
+        /*Requirement currentParent = item.getParent().getValue();
+        Requirement requirement = item.getValue();*/
+
+        int inset = 0;
+        while (item.getParent().getValue() != null) {
+            inset++;
+            item = item.getParent();
+        }
         String styleName = "-fx-border-insets: ";
-        String value = String.format("1px 1px 1px %dpx", (requirement.getLevel() - 1) * 25 + 1);
+        String value = String.format("1px 1px 1px %dpx", (inset) * 25 + 1);
         return String.format("%s%s;", styleName, value);
     }
 
