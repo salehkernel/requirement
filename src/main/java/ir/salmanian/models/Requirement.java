@@ -1,6 +1,8 @@
 package ir.salmanian.models;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -53,7 +55,7 @@ public class Requirement {
     private ReviewStatus reviewStatus;
     @ManyToOne
     private Project project;
-    @Column(name = "attachment")
+    @Column(name = "attachment", length = 4000)
     @Lob
     @XmlElement(name = "attachment")
     private String attachment;
@@ -65,10 +67,30 @@ public class Requirement {
     @XmlElement(name = "number")
     private Integer number;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(/*mappedBy = "children", */fetch = FetchType.EAGER)
+    /*@JoinTable(name = "requirements_parents",
+            joinColumns = @JoinColumn(name = "requirement_id"),
+            inverseJoinColumns = @JoinColumn(name = "parent_id"),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
+    )*/
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     @XmlElementWrapper(name = "parents")
     @XmlElement(name = "requirement")
-    List<Requirement> parents = new ArrayList<>();
+    private List<Requirement> parents = new ArrayList<>();
+
+   /* @ManyToMany(*//*mappedBy = "parents",*//* fetch = FetchType.EAGER, cascade = {})
+    *//*@JoinTable(name = "requirements_parents",
+            joinColumns = @JoinColumn(name = "parent_id"),
+            inverseJoinColumns = @JoinColumn(name = "requirement_id")
+    )*//*
+    @JoinTable(name = "requirements_parents",
+            joinColumns = @JoinColumn(name = "requirement_id"),
+            inverseJoinColumns = @JoinColumn(name = "parent_id")
+    )
+    @XmlElementWrapper(name = "children")
+    @XmlElement(name = "requirement")
+    private List<Requirement> children = new ArrayList<>();*/
 
     public UUID getId() {
         return id;
@@ -204,6 +226,15 @@ public class Requirement {
         this.number = number;
         return this;
     }
+
+    /*public List<Requirement> getChildren() {
+        return children;
+    }
+
+    public Requirement setChildren(List<Requirement> children) {
+        this.children = children;
+        return this;
+    }*/
 
     @Override
     public String toString() {
