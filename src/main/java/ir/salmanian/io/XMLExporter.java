@@ -3,6 +3,7 @@ package ir.salmanian.io;
 import ir.salmanian.models.Project;
 import ir.salmanian.models.Requirement;
 import ir.salmanian.services.RequirementService;
+import ir.salmanian.utils.RequirementUtils;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -35,9 +36,9 @@ public class XMLExporter implements Exporter {
                 file = new File(file.getAbsolutePath() + ".xml");
             }
             Set<Requirement> uniqueRequirements = getOrderedByLevelRequirements();
-            for (Requirement requirement : uniqueRequirements) {
+            /*for (Requirement requirement : uniqueRequirements) {
                 requirement.getParents().forEach(parent -> parent.getParents().clear());
-            }
+            }*/
             project.setRequirementList(new ArrayList<>(uniqueRequirements));
             try {
                 JAXBContext context = JAXBContext.newInstance(Project.class);
@@ -69,6 +70,15 @@ public class XMLExporter implements Exporter {
      */
     private Set<Requirement> getOrderedByLevelRequirements() {
         Set<Requirement> finalRequirements = new LinkedHashSet<>();
+        /*List<Requirement> requirementsList = RequirementService.getInstance().getRequirements(project);
+        int maxLevel = RequirementUtils.findMaxLevel(requirementsList);
+        for (int i = 1; i <= maxLevel ; i++) {
+            for (Requirement requirement :
+                    requirementsList) {
+                if (requirement.getLevel() == i)
+                    finalRequirements.add(requirement);
+            }
+        }*/
         Set<Requirement> requirementParentSet = new LinkedHashSet<>();
         Set<Requirement> requirementChildrenSet = new LinkedHashSet<>();
         List<Requirement> requirementsList = RequirementService.getInstance().getRequirements(project);
@@ -85,7 +95,7 @@ public class XMLExporter implements Exporter {
             requirementIterator = requirementParentSet.iterator();
             while (requirementIterator.hasNext()) {
                 Requirement parent = requirementIterator.next();
-                List<Requirement> children = RequirementService.getInstance().getChildrenRequirements(parent);
+                List<Requirement> children = /*parent.getChildren();*/RequirementService.getInstance().getChildrenRequirements(parent);
                 if (!children.isEmpty())
                     requirementChildrenSet.addAll(children);
                 requirementIterator.remove();
