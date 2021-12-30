@@ -179,7 +179,7 @@ public class RequirementFormController implements Initializable {
         });
 
         childrenRequirementObservableList = FXCollections.observableArrayList();
-        List<Requirement> requirementList = RequirementService.getInstance().getChildrenRequirements(requirementHolder);
+        List<Requirement> requirementList = /*requirementHolder.getChildren()*/RequirementService.getInstance().getChildrenRequirements(requirementHolder);
         childrenRequirementObservableList.addAll(requirementList);
         childrenRequirementListView.setItems(childrenRequirementObservableList);
 
@@ -298,9 +298,7 @@ public class RequirementFormController implements Initializable {
 
     @FXML
     public void onDeleteClick() throws IOException {
-        String stageKey = String.format("requirementFormStage-%s", requirementHolder.getId());
-        RequirementService.getInstance().deleteRequirement(requirementHolder);
-        CloseStageAndFocusMainStage(stageKey);
+        showDeleteDialog();
     }
 
     @FXML
@@ -334,11 +332,11 @@ public class RequirementFormController implements Initializable {
             showInappropriateEvaluationStatusDialog(evaluationStatusShouldBeMet);
             return;
         }
-        Requirement illegalParent = findIllegalParent();
+        /*Requirement illegalParent = findIllegalParent();
         if (illegalParent != null) {
             showIllegalParentDialog(illegalParent);
             return;
-        }
+        }*/
         saveTemporalRequirement(requirementHolder);
         String stageKey = "";
         if (requirementHolder.getId() == null) {
@@ -348,7 +346,7 @@ public class RequirementFormController implements Initializable {
         }
         RequirementService.getInstance().saveRequirement(requirementHolder);
         updateParentsEvaluationStatus(requirementHolder);
-        CloseStageAndFocusMainStage(stageKey);
+        CloseStageAndFocusMainStage(stageKey, false);
 
     }
 
@@ -371,12 +369,14 @@ public class RequirementFormController implements Initializable {
      * and refresh the requirementsTreeView of RequirementsStage.
      * @param stageKey the key of intended stage.
      */
-    private void CloseStageAndFocusMainStage(String stageKey) {
+    private void CloseStageAndFocusMainStage(String stageKey, boolean clearSelection) {
         Stage stage = ScreenController.getInstance().getMainStage();
         FXMLLoader loader = (FXMLLoader) stage.getScene().getUserData();
         RequirementsController controller = loader.getController();
         ScreenController.getInstance().closeStage(stageKey);
         controller.refreshTreeView();
+        if (clearSelection)
+            controller.clearTreeViewSelection();
         stage.requestFocus();
     }
 
@@ -434,6 +434,7 @@ public class RequirementFormController implements Initializable {
                 .setQualityFactor(qualityFactorCombo.getValue())
                 .setAttachment(attachmentsArea.getText() != null ? attachmentsArea.getText().trim() : "")
                 .setParents(parentRequirementListView.getItems())
+//                .setChildren(childrenRequirementListView.getItems())
                 .setProject(ProjectHolder.getInstance().getProject());
     }
 
@@ -524,6 +525,23 @@ public class RequirementFormController implements Initializable {
             }
             currentParents = parentsOfParents;
             parentsOfParents = new LinkedHashSet<>();
+        }
+    }
+
+    private void showDeleteDialog() {
+        Dialog dialog = new Dialog();
+        dialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        ButtonType ok = new ButtonType("تأیید", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType("انصراف", ButtonBar.ButtonData.CANCEL_CLOSE);
+        String message = "با حذف این نیازمندی، فرزندان آن که\nوالد دیگری ندارند، حذف خواهند شد.\n" +
+                "آیا از حذف نیازمندی مطمئن هستید؟";
+        dialog.getDialogPane().setContentText(message);
+        dialog.getDialogPane().getButtonTypes().addAll(ok, cancel);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+            String stageKey = String.format("requirementFormStage-%s", requirementHolder.getId());
+            RequirementService.getInstance().deleteRequirement(requirementHolder);
+            CloseStageAndFocusMainStage(stageKey, true);
         }
     }
 
