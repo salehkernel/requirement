@@ -4,6 +4,7 @@ import ir.salmanian.models.Project;
 import ir.salmanian.models.Requirement;
 import ir.salmanian.services.RequirementService;
 import ir.salmanian.utils.DocumentUtils;
+import ir.salmanian.utils.RequirementUtils;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -82,7 +83,17 @@ public class WordExporter implements Exporter {
      */
     private void writeRequirementsLevelByLevel(XWPFDocument document) {
         List<Requirement> requirementList = RequirementService.getInstance().getRequirements(project);
-        Set<Requirement> requirementParentSet = new LinkedHashSet<>();
+        int maxLevel = RequirementUtils.findMaxLevel(requirementList);
+        Set<Requirement> tempRequirements = new LinkedHashSet<>();
+        for (int i = 1; i <= maxLevel; i++) {
+            for (Requirement requirement: requirementList) {
+                if (requirement.getLevel() == i)
+                    tempRequirements.add(requirement);
+            }
+            writeToDoc(document, tempRequirements, i);
+            tempRequirements.clear();
+        }
+        /*Set<Requirement> requirementParentSet = new LinkedHashSet<>();
         Set<Requirement> requirementChildrenSet = new LinkedHashSet<>();
         Iterator<Requirement> requirementIterator = requirementList.iterator();
         while (requirementIterator.hasNext()) {
@@ -107,7 +118,7 @@ public class WordExporter implements Exporter {
             writeToDoc(document, requirementChildrenSet, level++);
             requirementParentSet = requirementChildrenSet;
             requirementChildrenSet = new LinkedHashSet<>();
-        }
+        }*/
     }
 
     /**
@@ -168,7 +179,7 @@ public class WordExporter implements Exporter {
                     parentsNumbers += String.format("%s-%d, ", parent.getPrefix(), parent.getNumber());
                 }
                 String childrenNumbers = "";
-                for (Requirement child : RequirementService.getInstance().getChildrenRequirements(requirement)) {
+                for (Requirement child : /*requirement.getChildren()*/RequirementService.getInstance().getChildrenRequirements(requirement)) {
                     childrenNumbers += String.format("%s-%d, ", child.getPrefix(), child.getNumber());
                 }
                 row3.setCantSplitRow(true);
