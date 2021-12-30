@@ -172,10 +172,15 @@ public class DatabaseManagement {
     public void deleteRequirement(Requirement requirement) {
         Session session = getSession();
         session.beginTransaction();
-        List<Requirement> requirements = getChildrenRequirements(requirement);
+        List<Requirement> requirements = /*requirement.getChildren()*/getChildrenRequirements(requirement);
         for (Requirement childRequirement : requirements) {
-            childRequirement.getParents().remove(requirement);
-            session.saveOrUpdate(childRequirement);
+
+            if (childRequirement.getParents().size() == 1)
+                deleteRequirement(childRequirement);
+            else {
+                childRequirement.getParents().remove(requirement);
+                session.saveOrUpdate(childRequirement);
+            }
         }
         session.delete(requirement);
         session.getTransaction().commit();
