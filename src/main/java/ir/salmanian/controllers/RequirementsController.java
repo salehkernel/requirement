@@ -73,7 +73,7 @@ public class RequirementsController implements Initializable {
                 TreeItem<Requirement> parentItem = (TreeItem<Requirement>) booleanProperty.getBean();
                 if (newValue) {
                     parentItem.getChildren().clear();
-                    List<Requirement> childrenRequirements = RequirementService.getInstance().getChildrenRequirements(parentItem.getValue());
+                    List<Requirement> childrenRequirements = /*parentItem.getValue().getChildren();*/RequirementService.getInstance().getChildrenRequirements(parentItem.getValue());
                     for (Requirement child : childrenRequirements) {
                         TreeItem<Requirement> childItem = new TreeItem<>(child);
                         childItem.expandedProperty().addListener(this::changed);
@@ -169,7 +169,8 @@ public class RequirementsController implements Initializable {
         ObservableList<TreeItem<Requirement>> parentItems = requirementTreeView.getSelectionModel().getSelectedItems();
         List<Requirement> parents = new ArrayList<>();
         parentItems.forEach(parentItem -> {
-            parents.add(parentItem.getValue());
+            if (parentItem != null)
+                parents.add(parentItem.getValue());
         });
         Requirement newRequirement = new Requirement();
         newRequirement.setParents(parents);
@@ -352,6 +353,10 @@ public class RequirementsController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void clearTreeViewSelection() {
+        requirementTreeView.getSelectionModel().clearSelection();
     }
 
     /**
