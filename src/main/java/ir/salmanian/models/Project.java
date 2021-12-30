@@ -1,6 +1,8 @@
 package ir.salmanian.models;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -27,8 +29,9 @@ public class Project {
     private String name;
     @ManyToOne
     private User creator;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @XmlElementWrapper(name = "requirements")
     @XmlElement(name = "requirement")
     private List<Requirement> requirementList;
