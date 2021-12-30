@@ -346,7 +346,7 @@ public class RequirementFormController implements Initializable {
         }
         RequirementService.getInstance().saveRequirement(requirementHolder);
         updateParentsEvaluationStatus(requirementHolder);
-        CloseStageAndFocusMainStage(stageKey, false);
+        closeStageAndFocusMainStage(stageKey, false);
 
     }
 
@@ -369,7 +369,7 @@ public class RequirementFormController implements Initializable {
      * and refresh the requirementsTreeView of RequirementsStage.
      * @param stageKey the key of intended stage.
      */
-    private void CloseStageAndFocusMainStage(String stageKey, boolean clearSelection) {
+    private void closeStageAndFocusMainStage(String stageKey, boolean clearSelection) {
         Stage stage = ScreenController.getInstance().getMainStage();
         FXMLLoader loader = (FXMLLoader) stage.getScene().getUserData();
         RequirementsController controller = loader.getController();
@@ -541,7 +541,7 @@ public class RequirementFormController implements Initializable {
         if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
             String stageKey = String.format("requirementFormStage-%s", requirementHolder.getId());
             RequirementService.getInstance().deleteRequirement(requirementHolder);
-            CloseStageAndFocusMainStage(stageKey, true);
+            closeStageAndFocusMainStage(stageKey, true);
         }
     }
 
